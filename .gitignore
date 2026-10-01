@@ -1,0 +1,10 @@
+.local/
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+*.pem
+*.key
+.DS_Store
+Thumbs.db
