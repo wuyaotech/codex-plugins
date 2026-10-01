@@ -94,3 +94,5 @@ node scripts/validate.mjs
 `main` 是团队安装跟踪分支。修改连接环境属于影响所有安装者的变更，须明确说明；当前入口固定为 dev，生产不在本版默认范围内。技能、MCP 配置和市场索引应一起 review。凭据由用户的客户端与 Git 凭据管理器保存，不提交到仓库。
 
 格式参考：[OpenAI 插件与团队市场文档](https://developers.openai.com/plugins/build/plugins)。
+
+安装链路已用 Codex CLI 0.159.2 的独立配置目录验证，详见[分发验收记录](docs/verification-2026-10-01.md)。
