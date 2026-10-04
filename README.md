@@ -48,6 +48,22 @@ https://nebulix-web-dev.wuyaotech.com/api/mcp/studio
 
 发布时明确授权模块、环境和范围，例如「将刚才确认的 operations 工单筛选改动发布到 dev，并验证线上结果」。
 
+### 广州水投本地联调
+
+从插件 `0.1.2` 起，技能会优先识别模块仓库提供的联调方式。**插件和业务源码仓库要分别更新**：更新本插件不会拉取 `wuyaotech/studio-gz-water`，拉取业务代码也不会更新插件。已安装同事先按下方“更新与移除”更新插件并重启客户端，再将以下提示词发给新对话：
+
+```text
+使用 Nebulix Studio 插件和 studio-develop 技能，维护 wuyaotech/studio-gz-water 的 gz-water 模块。
+保留我的未提交修改，获取最新 draft，先读取 AGENTS.md、README.md、package.json 和 docs/local-dev.md。
+使用本地前端 + 云端 dev 平台的联调方式。检查 Node >=22.13，按锁文件安装依赖，运行 npm run dev，打开本机工作台，我会自行登录 dev 账号。
+验证企业菜单、本地模块加载和保存源码后的自动刷新。本轮只做本地开发，不发布、不建表；缺少联调脚本时报告当前分支和提交，不要另搭 demo。
+若 Studio MCP 暂不可用，可以继续已知仓库的本地联调；配置和发布操作仍需恢复我的 MCP 登录与权限。
+```
+
+`gz-water` 默认入口是 `http://127.0.0.1:5199/biz/gz-water/workbench`，每个人都在自己的电脑启动、登录和访问；此地址不会打开别人的开发服务。Node 版本、端口和 `npm run dev` 是该模块的要求，其他模块以自身文档为准。`npm run preview` 是静态预览，不会提供相同的平台联调体验。
+
+当前广州水投业务台账仍使用浏览器样例数据，本地与线上页面按 origin 分开存储；登录、成员、菜单和其他已接通的 API 使用真实 dev 数据，在本地入口执行这些 API 的写操作也会影响 dev。此流程不自动发布，也不要求数据库或 OSS 凭据。
+
 ### 三类独立权限
 
 - **插件仓库**：GitHub Read 权限，用来安装和更新本插件。
