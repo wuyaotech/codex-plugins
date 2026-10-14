@@ -1,32 +1,35 @@
 # Studio 黑洞接入
 
-适用：模块定制页面展示黑洞场景、选择构件与业务联动，或模块后端读取黑洞数据。先读本模块 `docs/blackhole.md`、`web/src/runtime/blackhole.types.ts` 和实际 SDK 类型；这些文件由 starter 1.2.0 起分发。没有时通过 `get_starter` 下载至新的空目录，比较合并所需文件，不覆盖已有模块。
+适用：定制代码渲染场景，或按黑洞文档调用 HTTP（含业务授权的写接口）。先读模块 `docs/blackhole.md`、随包 `@nebulix/bp-sdk` 和 `web/src/runtime/blackhole.types.ts`。插件 0.1.4 / starter 1.3.0 增加通用 HTTP 指引；MCP `capabilityVersion=1` 不能证明线上运行宿主已升级。
 
-## 检查能力再编码
+## 检查能力
 
-- 插件 0.1.3 提供本流程；MCP `capabilityVersion=1` 只描述开发工具，不能证明线上宿主支持黑洞。
-- 前端需 `__NEBULIX_BIZ_RUNTIME__.version === '1'`、`capabilities.engineBh.version === 1` 和 `components.BlackholeSceneView`。优先使用随包 `getStudioBlackhole/tryGetStudioBlackhole`，旧宿主或独立 preview 显示能力缺失。
-- 后端项目 route 需 `ctx.engineBh.version === 1`；使用 SDK 随包类型。宿主负责绑定已验证的用户、企业、模块和项目。`projectUuid` 与引擎 `engineProjectUuid/projId` 不同。
-- 当前 `resourceAccess: trusted-host` 仅用于内部受信模块，浏览器仍依赖黑洞资源凭证。不宣称完成恶意扩展沙箱、匿名分享或外部嵌入授权。
+- 后端：项目作用域 route 的 `ctx.engineBh.httpVersion === 1`，使用 `getConnection({refresh?})` 或 `request<T>(options)`。
+- 前端：runtime version `1`、`capabilities.engineBh.httpVersion === 1`，通过 `getStudioBlackholeHttp()` 取得 `runtime.engineBh`；`tryGetStudioBlackholeHttp()` 可检测旧宿主。每次 `getConnection/request` 额外传 `{moduleKey, projectUuid}`，不要求挂载 SceneView。
+- 场景仍使用 `getStudioBlackhole()`、`capabilities.engineBh.version=1` 与 `components.BlackholeSceneView`。通用 HTTP 与场景能力分别检查。
 
-## 采用平台提供的接入面
+## 按接口文档发请求
 
-前端采用 `web/src/examples/BlackholeScenePage.tsx`：宿主的 SceneView 加载场景，ref 提供实例操作，onSelect 关联业务数据。模块不复制 SDK、Worker/WASM，不 import 平台私有 `@/` 路径，不依赖全局当前引擎。高级调用先按 `capability.sdkVersion` 核对 API。
+后端 `ctx.engineBh.request({method:'POST', path:'/blackHole3D/project/engine/v3/getLevels', body:{dataSetId}})`；前端 `http.request({...scope, method:'POST', path:'/project/engine/v3/getLevels', body:{dataSetId}})`，其中 `scope={moduleKey,projectUuid}`。该接口不需要先提供 sceneId；现有 17 个内部读取操作不是通用 HTTP 白名单。
 
-模型操作应在 `onReady` 后执行并捕获错误，只使用当前实例已加载的模型 ID，不自行去掉横线。`STUDIO_ENGINE_DATASET_NOT_LOADED` 表示 ID 无效、未加载或已过期；`selectElements` 仅支持 BIM 模型和非负安全整数构件 ID，否则抛出 `STUDIO_ENGINE_INVALID_ELEMENT_SELECTION`。
+`request` 固定使用平台配置的引擎源，自动加 token，HTTP 401 刷新一次；method 支持 GET/POST/PUT/PATCH/DELETE/HEAD/OPTIONS，默认 GET，GET/HEAD 不带 body。path 可带或不带 `/blackHole3D` 前缀，不能把外部 URL 作为 path。query 支持标量/数组，null 忽略；body 为 JSON，可传普通业务 headers，不能覆盖 Authorization 或传输/路由头。返回完整上游 JSON，不自动拆 data；`responseType:'text'` 返回原文，HEAD/204 为 null。
 
-后端采用 `server-extension/src/blackhole.ts`：project 作用域 route 调 `ctx.engineBh.project/scenes/models/elements`。只传业务筛选和资源标识，不能传任意 URL、请求头、token 或授权项目。查询不自动开通引擎、不写黑洞数据；缺映射由维护者按独立流程开通。
+两端 `getConnection` 返回 `{baseUrl,apiBaseUrl,token,expiresAt,projectUuid,engineProjectUuid}`。`expiresAt` 为 Unix 毫秒；`apiBaseUrl` 已含 `/blackHole3D`。可直接 `fetch(apiBaseUrl + '/project/engine/v3/getLevels', {method:'POST', headers:{Authorization:token,'Content-Type':'application/json'}, body:JSON.stringify({dataSetId})})`；Authorization 使用 token 原文，不加 Bearer。需要 projId 的接口按文档传 `engineProjectUuid`，request 不擅自注入。multipart/二进制用连接信息配合原生 fetch；浏览器直连需 CORS 和网络可达。完整双端示例见随包指南。
 
-场景元数据经过平台授权读取，宿主资源地址来自服务端 `engine_bh.baseUrl` 生成的配置。SDK 在浏览器直连下载模型、纹理和图片；私有部署需验证浏览器可达、HTTPS、跨域与资源路径，需要额外鉴权的私有图片尚未作为已支持场景。不要用模块 URL/token 参数绕过配置。
+HTTP 成功与业务成功分别核验。getLevels 已有 HTTP 200 但 `isSuccess:false/errMsg:'无效的pak文件'` 的联调结果，不能写成已取得楼层/房间业务结果。读取完整响应，按上游文档检查 isSuccess 等业务字段。
 
-`ENGINE_BH_UPSTREAM_FORBIDDEN` 表示黑洞上游 403，与 Nebulix 的 `PROJECT_ACCESS_DENIED` 区分；`ENGINE_BH_AUTH_FAILED`、`ENGINE_BH_TIMEOUT`、`ENGINE_BH_UPSTREAM_FAILED` 分别表示刷新后鉴权仍失败、超时和其他上游读取失败。由平台维护者排查上游权限/网络，模块不索要账号或凭证。
+## 受信代码与现有便利 API
 
-示例路由和页面是可选的，先保留已有 exports、业务菜单和配置，再增量合并。更新 SDK/vendor 时检查锁文件与构建 manifest 的实际 SDK 版本，不用新 starter 覆盖模块。新增菜单仍需草稿与发布流程。
+`trusted-host` 使用共享引擎账号凭据，token 不是逐项目受限 token。平台仍校验当前 Nebulix 项目和模块资格；通用 request/原生 fetch 不承诺任意接口逐资源隔离。按具体业务授权选资源、传项目参数和执行写操作，不把 token 当成资源权限证明。
 
-## 联调与交付
+不复制账号口令；token 通过 getConnection 按需取得，仅在执行/内存中使用，不写源码、配置、数据库、浏览器持久存储或日志。需要刷新时 getConnection({refresh:true})，不自己实现账号登录。
 
-先读模块现有本地联调文档。真实 dev 宿主 + 本地单模块 Remote 可复用 SDK、登录和权限；后端代码须激活 dev artifact 后验证。缺少本地网关时可用 dev 候选/已激活 Remote 在真实宿主验收。独立 preview 与 mock 仅辅助页面开发，不能代替真实场景。
+原 `project/scenes/models/elements` 封装保留为便利 API；例如 properties 仍要求 sceneId/dataSetId/elementIntId 并执行该封装的资源校验，不将这些前置条件套用到其他 HTTP 接口。
 
-用本人正常项目身份测试场景列表、真实渲染、点选属性、聚焦/显隐、切项目和卸载；验证资源越权、模块停用、未映射、上游失败和旧宿主提示。不要索要数据库、OSS 或黑洞账号凭据，不复制浏览器 token 到另一个环境。记录已验证的部署和浏览器范围。
+SceneView 复用宿主 SDK/React，不 import 平台私有路径。ref 操作在 onReady 后执行并捕获错误，只使用当前实例已加载的模型 ID，不自行删除横线；`STUDIO_ENGINE_DATASET_NOT_LOADED` 表示 ID 未加载/无效，selectElements 仅支持 BIM 和非负安全整数构件 ID。SDK 资源浏览器直连，私有网络和受鉴权图片需按真实资源验收，不能从通用 token 能力推断 SceneView 全部加载方式已支持。
 
-分别报告平台能力部署、模块源码/产物激活、团队插件发布、PM 实际更新。主仓改 Skill 不等于团队插件源已发布，插件更新也不会自动同步业务源码、starter/vendor 或平台权限。已有授权覆盖的具体工作继续执行；若用户仅要求分析或本地修改，不扩大到发布。
+## 升级、联调与交付
+
+新 starter 解压到空目录，比较合并适配器、类型、示例、文档与 vendor，不覆盖已有路由/菜单/配置。先读模块本地联调文档；真实 dev 宿主 + 本地单模块 Remote 可复用登录和 SDK，后端必须激活 dev artifact。独立 preview/mock 不代替真实宿主与 HTTP 结果。
+
+分别记录平台能力部署、模块源码/产物激活、团队插件发布、PM 实际更新。插件 0.1.4 需团队源发布后才能更新；更新插件不自动更新业务源码、starter/vendor 或平台权限。测试具体写接口以用户已授权的业务范围为准，不额外扩大到生产。

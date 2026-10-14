@@ -64,18 +64,19 @@ https://nebulix-web-dev.wuyaotech.com/api/mcp/studio
 
 当前广州水投业务台账仍使用浏览器样例数据，本地与线上页面按 origin 分开存储；登录、成员、菜单和其他已接通的 API 使用真实 dev 数据，在本地入口执行这些 API 的写操作也会影响 dev。此流程不自动发布，也不要求数据库或 OSS 凭据。
 
-### 黑洞场景与后端只读数据
+### 黑洞场景与前后端通用 HTTP
 
-插件 0.1.3 增加黑洞接入参考。平台维护者需先部署双端黑洞能力 v1 和 starter 1.2.0，再发布团队插件更新。以下提示词适用于完成该部署及插件更新后的新对话；准备和验收状态见 [0.1.3 记录](docs/blackhole-0.1.3.md)。
+插件 0.1.4 更新黑洞接入参考，配套 starter 1.3.0 和双端 `httpVersion=1`；场景渲染 v1 继续保留。团队源以 main 为安装入口，版本和验收方式见 [0.1.4 记录](docs/blackhole-0.1.4.md)。以下提示词适用于完成平台部署与插件更新后的新对话。
 
 ```text
-使用 Nebulix Studio 插件和 studio-develop 技能。先检查我的模块权限、平台黑洞能力 v1、当前模块的 docs/blackhole.md 和随包示例；不要只根据 MCP capabilityVersion 判断。
-保留原有代码，为已开通的项目增加一个黑洞场景页面，并在模块后端查询场景和构件属性。
-使用平台 SceneView 和 ctx.engineBh，不复制 SDK 或黑洞账号。旧模块从新 starter 比较合并类型和适配文件，不覆盖全仓。
-完成构建与真实 dev 宿主联调，分别报告平台、模块产物、插件版本和验收结果；本轮不发布生产。
+使用 Nebulix Studio 插件和 studio-develop 技能。先检查我的模块权限、两端黑洞 httpVersion=1、当前模块 docs/blackhole.md 和 SDK 类型，不只根据 MCP capabilityVersion 判断。
+保留原有代码，按黑洞文档使用通用 request，或通过 getConnection 取得 token/engineProjectUuid 后原生 fetch；Authorization 直接使用 token，不加 Bearer。
+现有场景/查询封装只是便利 API，不是接口白名单；getLevels 按文档传 dataSetId，不要求先有 sceneId。需要渲染时复用 SceneView。
+旧模块从新 starter 比较合并类型与适配文件，不覆盖全仓；token 只在内存使用。写请求按我授权的业务范围执行。
+完成构建与真实 dev 宿主联调，分别说明 HTTP 状态、上游业务结果和各版本；本轮不发布生产。
 ```
 
-已安装用户仍按下方既有更新流程操作，核验实际插件版本并开启新会话。主仓 Skill 修改、团队源发布、PM 实际安装更新是三项独立状态。旧宿主能力缺失时需先联系平台维护者，更新插件不会绕过项目权限、自动开通引擎或改变浏览器资源凭证边界。
+已安装用户仍按下方既有更新流程操作，核验实际插件版本并开启新会话。主仓 Skill 修改、团队源发布、PM 实际安装更新是三项独立状态。共享引擎账号 token 不是逐项目权限 token，通用 HTTP 不承诺任意资源隔离；平台仍检查本人的模块与项目资格。旧宿主能力缺失时先升级平台，更新插件不会自动开通引擎。
 
 ### 三类独立权限
 
