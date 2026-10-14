@@ -10,7 +10,7 @@
 - `.mcp.json`：dev 的远程 HTTP MCP 连接，不包含令牌。
 - `skills/studio-develop/SKILL.md`：业务开发、源码维护、配置与发布流程。
 - `skills/studio-develop/references/workflow.md`：配置和产物契约。
-- `skills/studio-develop/references/blackhole.md`：黑洞场景、后端数据、能力检测、独立模块升级与真实宿主联调。
+- `skills/studio-develop/references/blackhole.md`：黑洞场景、前后端通用 HTTP、连接凭据、能力检测、独立模块升级与真实宿主联调。
 
 读取或修改平台配置、准备发布时，请让 Codex 调用 `get_context`、`list_modules`。选择模块后，再检查关联 Git 仓库、草稿、已发布版本。账号的模块和环境权限以服务端返回为准；安装本插件不会自动授予 `operations` 或其他模块的发布权限。
 
@@ -18,7 +18,9 @@
 
 Git 提交、DB 草稿、构建产物上传、线上激活、业务验收分别记录。需要发布时，明确模块、环境和本次变更范围；操作授权按技能与团队规则执行。
 
-`0.1.3` 增加黑洞接入流程，对应 starter 1.2.0、前端宿主 `capabilities.engineBh.version=1` 和后端 `ctx.engineBh.version=1`。更新插件后，先检查实际平台能力；已有模块需比较合并 starter 的类型、适配文件和示例。插件更新不部署平台，也不覆盖业务仓库，不新增项目或发布权限。发布准备及待验收项见 [0.1.3 记录](../../docs/blackhole-0.1.3.md)。
+`0.1.4` 对应 starter 1.3.0 与前后端 `httpVersion=1`：按黑洞文档使用通用 request，或取得 token/engineProjectUuid 后原生 fetch。原场景与查询封装保留为便利 API；token 是共享引擎账号凭据，不是逐项目权限 token，通用请求不承诺任意接口逐资源隔离。写请求按业务授权执行，不复制口令或持久化 token。
+
+团队 main 包含本版后，即可从既有来源更新并检查实际平台能力，已有模块比较合并 starter 类型、适配文件和示例。插件更新不部署平台、不覆盖业务仓库、不新增项目权限。版本和验收方式见 [0.1.4 记录](../../docs/blackhole-0.1.4.md)，此前发布见 [0.1.3 记录](../../docs/blackhole-0.1.3.md)。
 
 ## 其他部署
 

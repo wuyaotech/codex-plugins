@@ -1,6 +1,6 @@
 ---
 name: studio-develop
-description: Use Nebulix Studio to create and maintain business modules through authenticated MCP tools, local code, Git, previews, local frontend integration with cloud dev, blackhole scene and data integration, and controlled development releases. Use when the user wants tables, dictionaries, menus, business pages, backend APIs, or changes to an existing Nebulix module.
+description: Use Nebulix Studio to create and maintain business modules through authenticated MCP tools, local code, Git, previews, local frontend integration with cloud dev, blackhole scene and general HTTP integration, and controlled development releases. Use when the user wants tables, dictionaries, menus, business pages, backend APIs, or changes to an existing Nebulix module.
 ---
 
 # Nebulix 业务开发
@@ -26,7 +26,7 @@ description: Use Nebulix Studio to create and maintain business modules through 
 
 ## 修改配置和代码
 
-- 需要在模块里显示黑洞场景、操作引擎实例或读取黑洞数据时，先读 [黑洞接入](references/blackhole.md)，检查宿主能力和随包契约；插件更新本身不会部署该能力。
+- 需要显示黑洞场景、操作实例或按黑洞文档调用 HTTP 时，先读 [黑洞接入](references/blackhole.md)，分别检查场景 v1 与通用 `httpVersion=1`。前后端可用 request 或取得 token/engineProjectUuid 后直连；原便利 API 不是接口白名单，写请求按具体业务授权执行。插件更新本身不会部署该能力。
 
 - 先 `export_configs` 读取 draft 和 published，保留 revision。同步本地文件前比较差异，避免覆盖本地工作。DB 是配置真相源，Git 保存源码和可 review 的配置副本。
 - 根据业务需求先明确字段、角色、状态流转与验收，优先复用已有表、字典、动态 CRUD 和模块内后端扩展。
