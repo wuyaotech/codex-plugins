@@ -29,9 +29,9 @@ node --test tests/mobile-h5-init.test.mjs
 5. 新建隔离 Codex 配置目录，仅对子进程指定；从本地市场安装候选插件，回读版本、启用状态及技能/资产文件。原用户配置和旧 personal 插件保持。
 6. 真人账号、实际企业/项目权限、云端发布及手机/三端能力分别记录，不能用公共接口、预览数据或受控替身代替。
 
-## 本地准备状态
+## 验证与发布状态
 
-当前变更尚未推送团队 main，不能向同事宣称升级已生效。
+2026-10-21（北京时间）已通过 [PR #3](https://github.com/wuyaotech/codex-plugins/pull/3) 发布到团队 main，插件发布提交 `0fe62de083ecbf37b1ee674270184b01efb6019c`，远端 manifest 回读为 0.1.5。合并前 head 与已验收提交一致、mergeable=CLEAN；该仓当时没有配置 CI checks，不能将其描述为远端 CI 已通过。
 
 | 检查 | 结果 |
 | --- | --- |
@@ -41,9 +41,13 @@ node --test tests/mobile-h5-init.test.mjs
 | 独立 starter 依赖安装/构建/启动 | 从已安装插件缓存初始化；npm ci、typecheck、build、29 项测试通过；修改标题后重建并回读成功 |
 | 独立 Agent 前向验证 | 仅插件与新空白客户目录，安装/构建/29测、IAB 页面、标题修改/watch/刷新及进度导航通过；控制台无 warn/error；测试服务已停 |
 | 隔离 Codex 配置目录安装候选版 | Codex CLI 0.162.0-alpha.17.2，本地市场安装 0.1.5，installed/enabled=true；原用户 config.toml SHA256 不变 |
-| 真人账号登录、业务授权、远端发布 | 未执行 |
+| 团队插件远端发布 | PR #3 已合并；远端 main 与插件 0.1.5 已回读 |
+| 维护者现有安装更新 | 原 `nebulix-studio@personal` 更新为 0.1.5，installed/enabled=true；未再启用团队版重复连接 |
+| 真人账号业务登录、业务授权、云端模块发布 | 未执行 |
 
 HTTP 验证：首页、`/runtime/react.js`、`/runtime/sdk.js`、`/modules/schedule/entry.js`、`/__mobile/environment` 均 200，旧 `/__mobile/apps` 为 404。独立验证服务使用随机端口，已停止，未占用常用 5518。
+
+维护者实际安装缓存为 `~/.codex/plugins/cache/personal/nebulix-studio/0.1.5`。新技能和 receipt 与发布源码一致，46 个模板文件 SHA256 通过；原用户 `config.toml`、personal 市场索引和 `.mcp.json` 的字节哈希均未改变，另外 18 个插件安装状态保持。更新没有执行登录、撤销授权或删除凭据操作。重启 Codex 并开启新对话后加载新技能；此记录不冒充同事本人已完成更新或 OAuth。
 
 前向验证尝试 clone 真实 HLSCS 仓两次，均在本机 Git 初始化 `.git/config` 时失败，尚未到远端连接。后续采用空白客户目录，因此本记录不宣称真实 HLSCS 干净 clone、业务接入或账号权限已验收。具体 HLSCS 功能由客户仓自身验收记录承担。
 
@@ -51,7 +55,7 @@ HTTP 验证：首页、`/runtime/react.js`、`/runtime/sdk.js`、`/modules/sched
 
 ## 团队更新
 
-审核合并到私仓 `main` 后，同事使用：
+已安装团队源的同事使用：
 
 ```sh
 codex plugin marketplace upgrade wuyaotech
@@ -60,5 +64,7 @@ codex plugin list --marketplace wuyaotech
 ```
 
 重启客户端并开启新对话，确认实际安装为 0.1.5、能发现 `mobile-h5-develop`。插件仓 Read、客户源码仓权限、Nebulix OAuth/模块发布权限相互独立。插件升级不自动改写已复制到客户仓的 H5 或 SDK。
+
+只有旧 personal 来源的使用者应核对既有安装来源，由维护者更新该来源或迁移到团队来源；不要同时启用两个连接相同 MCP 地址的 Nebulix Studio 实例。本次维护者保留既有 personal 身份和授权配置。
 
 打包布局保持现有 Codex 兼容格式；格式与路径依据 [OpenAI 插件文档](https://developers.openai.com/plugins/build/plugins)，命令同时以本机 CLI help 核对。本次没有更改连接环境、生产配置、GitHub 权限或原用户 Codex 配置。
