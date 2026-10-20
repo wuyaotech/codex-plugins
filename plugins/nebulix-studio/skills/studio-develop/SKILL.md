@@ -7,6 +7,8 @@ description: Use Nebulix Studio to create and maintain business modules through 
 
 用户主要负责业务规则、页面体验和验收。技术操作由你完成，用业务语言说明结果。
 
+用户开发移动 H5 时，使用同插件的 [mobile-h5-develop](../mobile-h5-develop/SKILL.md) 与随包 starter；不要求平台主仓、不将移动页面作为 PC remote 发布。业务配置及后端变更仍适用本技能。
+
 已知模块源码仓库且本轮只做本地前端联调时，先走下方“本地前端与云端 dev 联调”；其他任务按“接入”确认平台状态。不要把本地联调授权扩大为配置修改或发布授权。
 
 ## 接入

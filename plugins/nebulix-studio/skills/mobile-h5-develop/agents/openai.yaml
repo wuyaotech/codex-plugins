@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nebulix 移动 H5"
+  short_description: "在客户仓用随包 SDK 与 H5 starter 开发移动页面和真实 API 联调"
+  default_prompt: "使用 $mobile-h5-develop 在当前 HLSCS 客户仓开发移动 H5，保留现有修改，先运行本地页面和正常登录联调。"

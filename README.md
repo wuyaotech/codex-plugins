@@ -86,6 +86,23 @@ https://nebulix-web-dev.wuyaotech.com/api/mcp/studio
 
 插件包含操作技能和服务连接地址，不包含数据库、OSS、CI 或个人 OAuth 凭据，也不要求同事获得这些发布密钥。
 
+### HLSCS 与客户移动 H5
+
+`0.1.5` 增加 `mobile-h5-develop` 技能、完整通用 H5 starter 和随包 mobile SDK。PM 只需插件与客户模块源码仓，不需要 Nebulix 平台主仓；公开 npm 依赖仍需正常安装。已有 H5 直接维护，没有时由技能脚本创建新的 `h5-app/`，不会覆盖原文件。
+
+更新插件后开启新对话，例如：
+
+```text
+使用 Nebulix Studio 插件的 mobile-h5-develop 技能，维护 HLSCS 的移动 H5。
+当前只有客户模块仓，没有 Nebulix 平台主仓。保留我的未提交修改，先检查仓库说明与已有 h5-app。
+没有 H5 时使用插件内的 starter 创建 h5-app，按锁文件安装、构建并启动，我用自己的 dev 账号登录。
+首页、导航和模块组合在客户代码里维护，不要创建额外管理站点。本轮先完成本地开发与浏览器验证，报告真实 API 和示例数据的区别。
+```
+
+模板中的进度和现场日志是明确标记的示例，不代表 HLSCS 已有接口接入。真实业务从客户仓现行文档和 API 实现开始。完整 H5、可复用移动模块及原生壳分别交付；随包代码不包含三端壳，也不自动部署云端。mobile target 发布必须先检查服务 `get_context` 返回的真实能力，旧服务不能按 PC target 兜底上传。
+
+客户仓中的 H5 是可独立维护的源码副本，插件更新不会覆盖它。插件 starter 版本、客户 SDK 版本和线上服务能力要分别核对。分发内容及本轮验收见 [0.1.5 记录](docs/mobile-h5-0.1.5.md)。
+
 ## 更新与移除
 
 更新市场后重新安装插件，再重启客户端：
@@ -119,6 +136,7 @@ codex plugin marketplace remove wuyaotech
 
 ```sh
 node scripts/validate.mjs
+node --test tests/mobile-h5-init.test.mjs
 ```
 
 `main` 是团队安装跟踪分支。修改连接环境属于影响所有安装者的变更，须明确说明；当前入口固定为 dev，生产不在本版默认范围内。技能、MCP 配置和市场索引应一起 review。凭据由用户的客户端与 Git 凭据管理器保存，不提交到仓库。

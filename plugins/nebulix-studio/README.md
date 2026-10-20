@@ -11,6 +11,7 @@
 - `skills/studio-develop/SKILL.md`：业务开发、源码维护、配置与发布流程。
 - `skills/studio-develop/references/workflow.md`：配置和产物契约。
 - `skills/studio-develop/references/blackhole.md`：黑洞场景、前后端通用 HTTP、连接凭据、能力检测、独立模块升级与真实宿主联调。
+- `skills/mobile-h5-develop/`：客户仓移动 H5 技能、模块/业务/API/发布参考、安全初始化脚本及随包独立 starter/SDK。
 
 读取或修改平台配置、准备发布时，请让 Codex 调用 `get_context`、`list_modules`。选择模块后，再检查关联 Git 仓库、草稿、已发布版本。账号的模块和环境权限以服务端返回为准；安装本插件不会自动授予 `operations` 或其他模块的发布权限。
 
@@ -21,6 +22,8 @@ Git 提交、DB 草稿、构建产物上传、线上激活、业务验收分别�
 `0.1.4` 对应 starter 1.3.0 与前后端 `httpVersion=1`：按黑洞文档使用通用 request，或取得 token/engineProjectUuid 后原生 fetch。原场景与查询封装保留为便利 API；token 是共享引擎账号凭据，不是逐项目权限 token，通用请求不承诺任意接口逐资源隔离。写请求按业务授权执行，不复制口令或持久化 token。
 
 团队 main 包含本版后，即可从既有来源更新并检查实际平台能力，已有模块比较合并 starter 类型、适配文件和示例。插件更新不部署平台、不覆盖业务仓库、不新增项目权限。版本和验收方式见 [0.1.4 记录](../../docs/blackhole-0.1.4.md)，此前发布见 [0.1.3 记录](../../docs/blackhole-0.1.3.md)。
+
+`0.1.5` 增加 [mobile-h5-develop](skills/mobile-h5-develop/SKILL.md)。PM 不需要平台主仓，技能会从自身 `assets/starter/` 将通用 H5、SDK 和锁文件复制到客户仓的新 `h5-app/`。HLSCS 为首个接入对象，通用示例不冒充真实业务。代码维护首页/导航/模块来源；业务 Studio DB 真相源保持。当前服务是否支持 mobile target 要实时探测，插件不声明专用 mobile MCP 工具。验证记录见 [0.1.5](../../docs/mobile-h5-0.1.5.md)。
 
 ## 其他部署
 
