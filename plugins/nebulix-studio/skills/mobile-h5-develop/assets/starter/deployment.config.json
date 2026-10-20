@@ -1,0 +1,5 @@
+{
+  "environment": "development",
+  "apiBaseUrl": "/api",
+  "productHost": "nebulix-web-dev.wuyaotech.com"
+}

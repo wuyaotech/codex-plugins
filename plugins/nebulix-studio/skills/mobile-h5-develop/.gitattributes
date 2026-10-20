@@ -1,0 +1,2 @@
+# The starter receipt hashes the distributed bytes; preserve them across Git checkouts.
+assets/starter/** -text

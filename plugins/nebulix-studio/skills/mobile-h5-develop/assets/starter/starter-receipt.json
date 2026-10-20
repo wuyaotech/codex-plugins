@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "starter": {
+    "name": "@nebulix/mobile-h5-starter",
+    "version": "0.2.0",
+    "sourceSha256": "b4c4e7deb98149c547c318a8142beb26b4daaf4ecbe280944934bcbdee339ec8"
+  },
+  "moduleKey": "hlscs",
+  "sdk": {
+    "name": "@nebulix/mobile-sdk",
+    "version": "0.1.0",
+    "sourceSha256": "0dddc35e67a4ee7e3a3ecf0aea1720cbb32fec8c34b1c917f39cd4ec7791367b"
+  },
+  "generatedAt": "2026-10-20T16:00:24.014Z",
+  "dependencyInstallation": "npm",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "f697dc432e1358dd0f742eaa53fcfc7ab3b1e2a5982c8cb20cfd9ac597c8ecf2",
+      "bytes": 74
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "ebfeac8471d08e121aef5a3795f3669d5b44f56d6e4e58ffd6817b99bb58edb1",
+      "bytes": 34
+    },
+    {
+      "path": ".npmrc",
+      "sha256": "52c993502a87a61649d9e001b6133410bb394616748090e2e59ce255d0d36fa4",
+      "bytes": 18
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "516a2607fdd39717dae37ffaf6bdb8006075dabc089b799ff1a7e925521cf604",
+      "bytes": 647
+    },
+    {
+      "path": "deployment.config.json",
+      "sha256": "11857f6c91b2691b1dd1b27dd8ae407f2e1f35b25d439fa21ab036ddfe30bb27",
+      "bytes": 109
+    },
+    {
+      "path": "examples/schedule/data.ts",
+      "sha256": "c3fa91bc2125458560d077c0eed758e4b6edfa18f134a1c45017f75acc64e422",
+      "bytes": 2999
+    },
+    {
+      "path": "examples/schedule/index.tsx",
+      "sha256": "c8e7648dd5967781b6f8aabdff1e5feaa89ac6211669a83b393049fcb589ac60",
+      "bytes": 7203
+    },
+    {
+      "path": "examples/schedule/schedule.css",
+      "sha256": "edeff71141aebb04dfb6a602ac8319f54bf1ee568a5ea8f91aa10aec5dae0756",
+      "bytes": 7474
+    },
+    {
+      "path": "examples/site-log/index.tsx",
+      "sha256": "83ce541225d8dd13ad3d44fbc250760cd16a81cdc70927364c0514b1c13f7cc7",
+      "bytes": 11259
+    },
+    {
+      "path": "examples/site-log/site-log.css",
+      "sha256": "1132e59d9330d9a566437c310c248462137ac3db5b546cafec525fa81b9b697d",
+      "bytes": 5700
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "099e8365700d4e95c33af029938e0f8db7f44f73ff1b7c62b25d396e3f37b3bf",
+      "bytes": 33203
+    },
+    {
+      "path": "package.json",
+      "sha256": "51cba056ba0f296e8f71b05acb5e178015133f51b9200e98d006ecbead380201",
+      "bytes": 738
+    },
+    {
+      "path": "README.md",
+      "sha256": "fdc67788ec37abea6cd3192f2e151a561317d2bb789595c2042a846a9c13267e",
+      "bytes": 4008
+    },
+    {
+      "path": "scripts/build-module.mjs",
+      "sha256": "eb04ade32aeb30a9c09f5352108729f7ec660ec7d16076d51743c1edf08ab5ad",
+      "bytes": 11060
+    },
+    {
+      "path": "scripts/build.mjs",
+      "sha256": "da2821bf087ae80ad2e78a01d5cbacc8c6559c501f7c524425bcd7daf261b689",
+      "bytes": 8951
+    },
+    {
+      "path": "scripts/dev.mjs",
+      "sha256": "35761678c0d63b9e7e81db4542d0ade0f36ba65eefa783839f1115fa7da39ad0",
+      "bytes": 2310
+    },
+    {
+      "path": "scripts/export-starter.mjs",
+      "sha256": "45cac579a42ccf33995d22655578a66d2ea570f8af465d0a5337e74fffafa5ec",
+      "bytes": 12158
+    },
+    {
+      "path": "scripts/test.mjs",
+      "sha256": "0b19727f67f3eacef85e58ad483e9d442c43bcf4cdd178429867b8954a6e5049",
+      "bytes": 776
+    },
+    {
+      "path": "scripts/tooling.mjs",
+      "sha256": "fb85504671289a2dde4b0690122617a627bf4d7ac72749ba83546daa4c8acb89",
+      "bytes": 1212
+    },
+    {
+      "path": "scripts/typecheck.mjs",
+      "sha256": "73a49e95422d3ad80278f34a40d8d7458d57c3083b06d9924da1c0f8e12f459f",
+      "bytes": 1255
+    },
+    {
+      "path": "server/files.mjs",
+      "sha256": "6b8b3dbf38afa7ac57842b5fb7a31b88038e1a2342ec2c632b9b32154704eaa3",
+      "bytes": 915
+    },
+    {
+      "path": "server/index.mjs",
+      "sha256": "4384022dee7e4e11549a09df1177f34fbd48bf7974b72c8b0969a134ad84a324",
+      "bytes": 11765
+    },
+    {
+      "path": "server/README.md",
+      "sha256": "1e9ae507f214920f35a2ba7b214bd2ebbdb6479f8efddfaa0713213e6a0f55de",
+      "bytes": 2792
+    },
+    {
+      "path": "tests/build-module.test.mjs",
+      "sha256": "f44d9f49bc6a69b37984b7f736a42b70f47df2e98ebe6aea8154e3ac998bb84b",
+      "bytes": 10381
+    },
+    {
+      "path": "tests/export-starter.test.mjs",
+      "sha256": "c87f80c8296413e9e1ad68f4e89db13d0baca3803da1d706f2e6cc44ca9c8208",
+      "bytes": 3376
+    },
+    {
+      "path": "tests/h5-build.test.mjs",
+      "sha256": "77488260cb665709c3666b27908ae70d3e8cd622b76a5c9fa744e54293534dd9",
+      "bytes": 2706
+    },
+    {
+      "path": "tests/server.test.mjs",
+      "sha256": "105b0b892458a7e2fa5c20d225e80a75ba99a726fc6c5d8349b1c9b3e4e93596",
+      "bytes": 12594
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "c6adadf8e592a58c2abc58f4b9495634313dc49e818ac87028b433451f2fa299",
+      "bytes": 531
+    },
+    {
+      "path": "vendor/mobile-sdk/package.json",
+      "sha256": "e743900c540263e966da010cebfa9e8687e1817f29bf21f6035194c33536f094",
+      "bytes": 404
+    },
+    {
+      "path": "vendor/mobile-sdk/scripts/test.mjs",
+      "sha256": "59665c2d96bbce5a68bb6507d69e5349a1cc2cda9f9bec0727cc41b4f4a25a46",
+      "bytes": 1383
+    },
+    {
+      "path": "vendor/mobile-sdk/src/bridge.ts",
+      "sha256": "b9de91ebeb94774f11021399b95b97db5fa2cb447b131d9fa687c31e257bdf3c",
+      "bytes": 3488
+    },
+    {
+      "path": "vendor/mobile-sdk/src/errors.ts",
+      "sha256": "9e4f217ea382b6472a59e5f2c98ca308272aadb283f08af4cac0c8a5f8d604db",
+      "bytes": 328
+    },
+    {
+      "path": "vendor/mobile-sdk/src/index.ts",
+      "sha256": "c6b5917e0ee90fad9040b9196e396f9d9d066229a9adb7d2ca961c8ddb966f65",
+      "bytes": 213
+    },
+    {
+      "path": "vendor/mobile-sdk/src/modules.ts",
+      "sha256": "c2108f3bd353d2560482b0c313ad64100ed8298128da61322857baf071b2a9e1",
+      "bytes": 5152
+    },
+    {
+      "path": "vendor/mobile-sdk/src/navigation.ts",
+      "sha256": "6ff16fed98788a86a8de09aaad58b5b31a5761c46d781cf16b342f5d3093ea2f",
+      "bytes": 2017
+    },
+    {
+      "path": "vendor/mobile-sdk/src/react.ts",
+      "sha256": "f6abdf7fb01dacb35e3167142216dd7b417da8aa1ab86e5ca63a1c7851a8b47f",
+      "bytes": 837
+    },
+    {
+      "path": "vendor/mobile-sdk/src/release.ts",
+      "sha256": "19ab559efbc66fdb5c275fecc57fe4f8d04cfd1e73b762d19093231f66f3f252",
+      "bytes": 6623
+    },
+    {
+      "path": "vendor/mobile-sdk/src/session.ts",
+      "sha256": "4cc7fe5c0c7242c1ad007564b7928ea8f80dfe6e23c265e4737b8e94128ad577",
+      "bytes": 9321
+    },
+    {
+      "path": "vendor/mobile-sdk/src/types.ts",
+      "sha256": "83bb8333b273710b816283fa1aa1be374f40425f8bce6df4e18607a2e733abbf",
+      "bytes": 3358
+    },
+    {
+      "path": "vendor/mobile-sdk/tests/sdk.test.ts",
+      "sha256": "8d6b007e6b994826668f8229658825823d12191a3d8b496894f8f44070e3f2c9",
+      "bytes": 12343
+    },
+    {
+      "path": "vendor/mobile-sdk/tsconfig.json",
+      "sha256": "1d380b9fd2745be8c8a3062a2354c9be81db3aaf21c1f5566a76c8c26b217b3d",
+      "bytes": 255
+    },
+    {
+      "path": "web/base.css",
+      "sha256": "24206a2f7a879806a2befeab4d872e963026f16113f75bf57780adf9b0d4a66d",
+      "bytes": 120
+    },
+    {
+      "path": "web/h5.config.ts",
+      "sha256": "8ac68d87766a92a33b62e587cd7d4561df8ba0e340ca70fdf59bd7838ceaf813",
+      "bytes": 2118
+    },
+    {
+      "path": "web/main.tsx",
+      "sha256": "3ccfb50a3353576484d35433bdc8b5d36e170c1d2f6d7a253f9b0a24dca9e5b8",
+      "bytes": 208
+    },
+    {
+      "path": "web/mobile/mobile.css",
+      "sha256": "320376aadf00762a8642646f3b5d9199bb5271000ba6952c879ce1b09c81caee",
+      "bytes": 12596
+    },
+    {
+      "path": "web/mobile/MobileApp.tsx",
+      "sha256": "22e91e09a4ddd46c9b324e4cfad0da459b05cbe91a57b7cf7730a14e3ed7f8c7",
+      "bytes": 34525
+    }
+  ]
+}

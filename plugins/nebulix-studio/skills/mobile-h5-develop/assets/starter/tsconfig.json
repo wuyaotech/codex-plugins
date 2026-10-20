@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "paths": {
+      "@nebulix/mobile-sdk": [
+        "./vendor/mobile-sdk/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "web/**/*.ts",
+    "web/**/*.tsx",
+    "examples/**/*.ts",
+    "examples/**/*.tsx",
+    "modules/**/*.ts",
+    "modules/**/*.tsx"
+  ]
+}
