@@ -32,6 +32,7 @@ ZIP 根契约为：
 
 1. `prepare_upload`：`kind: "h5-site"`，不传 target，身份/版本/源码/sha256/size 来自 receipt。仅 PUT 返回的单次上传 URL，不传播签名 URL。
    starter 0.3.1 起 ZIP 使用标准 DEFLATE 压缩，减少慢上行传输量。PUT 应按文件大小、实际网络和票据剩余有效期给足超时；不要用很短的探测超时判定完整包失败。传输超时/reset/结果不明时先读取当前上传或artifact状态，必要时按实际工具完成校验；只在确认票据仍有效且未完成时重试同一票据与相同字节。不吞掉异常，不把PUT发起或超时当成上传成功，不因不确定结果直接激活。
+   若同一网络出现“大body不节流会reset/超时，小body正常”的突发传输症状，可在先回读确认结果后，以相同有效票据和完全相同ZIP字节尝试curl限速，例如 `curl --http1.1 --header "Expect:" --limit-rate 16k --max-time 120 --fail-with-body --upload-file "<同一个ZIP>" "<同一个signedPutUrl>"`（Windows可用curl.exe；保留票据要求的其他请求头）。这是本机链路故障的可选排查方法，不是所有客户的默认速率。不要输出签名URL；HTTP成功后仍须complete_upload和artifact校验，不吞异常、不直接宣称发布完成。
 2. PUT 成功后 `complete_upload`，再查询 artifact 校验结果。只使用通过校验且身份、版本、sourceCommit 与本次一致的整站 artifact。
 3. `prepare_h5_site_release`：使用本次 `artifactId` 与此前读取的 `expectedActiveRelease`（active.releaseId 或 null）。检查目标模块、development 域名、旧/新版本和包摘要；此预检仅站点激活，不得夹带 DB 草稿。
 4. `execute_h5_site_release({moduleKey, environment, releaseId})` 执行预检结果，随后用 `get_h5_site_release_status({moduleKey, environment, releaseId})` 轮询到明确成功或失败。读取实际工具返回的标识，不按示例编造 releaseId。失败先看错误与当前站点，避免不明结果直接重发。
