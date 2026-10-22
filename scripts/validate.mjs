@@ -34,6 +34,9 @@ for (const entry of marketplace.plugins) {
   assert.equal(manifest.name, entry.name);
   assert.match(manifest.version, /^\d+\.\d+\.\d+$/);
   assert.ok(manifest.description && manifest.author?.name && manifest.interface?.displayName);
+  const prompts = manifest.interface?.defaultPrompt;
+  assert.ok(Array.isArray(prompts) && prompts.length > 0 && prompts.length <= 3, 'Plugin interface supports one to three default prompts');
+  assert.ok(prompts.every(prompt => typeof prompt === 'string' && prompt.trim()), 'Default prompts must be nonempty strings');
   const skillsRoot = await resolveInside(pluginRoot, manifest.skills);
   const skillDirectories = (await readdir(skillsRoot, { withFileTypes: true })).filter(item => item.isDirectory());
   assert.ok(skillDirectories.length > 0);
