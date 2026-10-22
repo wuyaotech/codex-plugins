@@ -148,3 +148,7 @@ node --test tests/mobile-h5-init.test.mjs
 ## 移动 H5 整站发布（0.1.6）
 
 0.1.6 随包提供 starter 0.3.0、SDK 0.1.0、build:site 和独立整站发布指引。PM 只用客户仓：检查并提交 H5 → 构建 ZIP → 插件上传 h5-site → 平台预检/激活/回读；回退复用历史站点 artifact。平台预先绑定域名和环境，PM 无需主仓、CI 或 OSS/FC 密钥。整站不发布 Studio 配置草稿，ESM mobile 模块仍走原独立路径。插件升级不会覆盖客户源码；服务能力需以 get_context.features.h5Sites 和实际工具 schema 为准。
+
+## H5 ZIP 慢上行修复（0.1.7）
+
+插件0.1.7将starter更新为0.3.1，整站ZIP使用标准DEFLATE压缩，保留CRC和原始大小，减少移动H5运行时的上传体积。PUT给予与网络匹配的超时，不确定时先核对上传/产物状态，完成校验后才激活。接口契约、SDK0.1.0和MCP连接保持原样；插件升级仍不覆盖客户工程。平台本轮development验证结果另见平台回执。

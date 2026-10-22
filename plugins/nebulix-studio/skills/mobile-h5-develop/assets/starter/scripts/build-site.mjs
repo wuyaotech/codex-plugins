@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { deflateRawSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import { root } from './tooling.mjs';
 import { buildMobile, readH5Config } from './build.mjs';
@@ -35,7 +36,7 @@ function crc32(bytes) {
   for (const value of bytes) crc = (crc >>> 8) ^ crcTable[(crc ^ value) & 0xff];
   return (crc ^ 0xffffffff) >>> 0;
 }
-/** Small deterministic ZIP32 STORE writer; no host zip executable, dependency, symlink or extra files. */
+/** Small deterministic ZIP32 DEFLATE writer; no host zip executable, dependency, symlink or extra files. */
 export function createSiteZip(files) {
   const local = [], central = [];
   let offset = 0;
@@ -43,15 +44,16 @@ export function createSiteZip(files) {
   for (const { name, bytes } of files) {
     if (!/^[a-zA-Z0-9_./-]+$/.test(name) || name.startsWith('/') || name.split('/').some(part => !part || part === '.' || part === '..')) throw new Error(`Unsafe ZIP path: ${name}`);
     const filename = Buffer.from(name), checksum = crc32(bytes);
+    const compressed = deflateRawSync(bytes, { level: 9 });
     if (bytes.length > 0xffffffff || offset > 0xffffffff) throw new Error('Site exceeds ZIP32 limits.');
     const header = Buffer.alloc(30);
-    header.writeUInt32LE(0x04034b50, 0); header.writeUInt16LE(20, 4); header.writeUInt16LE(0x800, 6);
-    header.writeUInt16LE(0x21, 12); header.writeUInt32LE(checksum, 14); header.writeUInt32LE(bytes.length, 18); header.writeUInt32LE(bytes.length, 22); header.writeUInt16LE(filename.length, 26);
-    local.push(header, filename, bytes);
+    header.writeUInt32LE(0x04034b50, 0); header.writeUInt16LE(20, 4); header.writeUInt16LE(0x800, 6); header.writeUInt16LE(8, 8);
+    header.writeUInt16LE(0x21, 12); header.writeUInt32LE(checksum, 14); header.writeUInt32LE(compressed.length, 18); header.writeUInt32LE(bytes.length, 22); header.writeUInt16LE(filename.length, 26);
+    local.push(header, filename, compressed);
     const record = Buffer.alloc(46);
-    record.writeUInt32LE(0x02014b50, 0); record.writeUInt16LE(20, 4); record.writeUInt16LE(20, 6); record.writeUInt16LE(0x800, 8);
-    record.writeUInt16LE(0x21, 14); record.writeUInt32LE(checksum, 16); record.writeUInt32LE(bytes.length, 20); record.writeUInt32LE(bytes.length, 24); record.writeUInt16LE(filename.length, 28); record.writeUInt32LE(offset, 42);
-    central.push(record, filename); offset += header.length + filename.length + bytes.length;
+    record.writeUInt32LE(0x02014b50, 0); record.writeUInt16LE(20, 4); record.writeUInt16LE(20, 6); record.writeUInt16LE(0x800, 8); record.writeUInt16LE(8, 10);
+    record.writeUInt16LE(0x21, 14); record.writeUInt32LE(checksum, 16); record.writeUInt32LE(compressed.length, 20); record.writeUInt32LE(bytes.length, 24); record.writeUInt16LE(filename.length, 28); record.writeUInt32LE(offset, 42);
+    central.push(record, filename); offset += header.length + filename.length + compressed.length;
   }
   const centralSize = central.reduce((total, bytes) => total + bytes.length, 0), end = Buffer.alloc(22);
   end.writeUInt32LE(0x06054b50, 0); end.writeUInt16LE(files.length, 8); end.writeUInt16LE(files.length, 10); end.writeUInt32LE(centralSize, 12); end.writeUInt32LE(offset, 16);

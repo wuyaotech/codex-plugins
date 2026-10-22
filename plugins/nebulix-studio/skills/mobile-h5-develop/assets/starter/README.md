@@ -1,6 +1,6 @@
 # 独立移动 H5 开发套件
 
-套件 0.3.0，归属模块 `hlscs`。此目录可直接作为客户仓的 `h5-app/`，不需要 nebulix 主仓。SDK 客户端源码位于 `vendor/mobile-sdk/`，其版本及代码 SHA-256 记录在 `starter-receipt.json`。module-key 是交付归属，不自动替换示例业务页。
+套件 0.3.1，归属模块 `hlscs`。此目录可直接作为客户仓的 `h5-app/`，不需要 nebulix 主仓。SDK 客户端源码位于 `vendor/mobile-sdk/`，其版本及代码 SHA-256 记录在 `starter-receipt.json`。module-key 是交付归属，不自动替换示例业务页。
 
 ## 安装、启动与检查
 

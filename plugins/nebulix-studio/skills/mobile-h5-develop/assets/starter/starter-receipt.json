@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "starter": {
     "name": "@nebulix/mobile-h5-starter",
-    "version": "0.3.0",
-    "sourceSha256": "67f5fa3780d81dd5febac1b62276934af49ba8ab574dbe635f49f8d8c2c9634d"
+    "version": "0.3.1",
+    "sourceSha256": "0112b125a398fad5bf0bcef073900a3a2084c8f32e885fd6f09673cd4ff50d3a"
   },
   "moduleKey": "hlscs",
   "sdk": {
@@ -11,7 +11,7 @@
     "version": "0.1.0",
     "sourceSha256": "0dddc35e67a4ee7e3a3ecf0aea1720cbb32fec8c34b1c917f39cd4ec7791367b"
   },
-  "generatedAt": "2026-10-22T15:02:54.710Z",
+  "generatedAt": "2026-10-22T15:22:06.671Z",
   "dependencyInstallation": "npm",
   "files": [
     {
@@ -66,17 +66,17 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "11541049d277af368316940126c3fe2a898eefbb82de6ac85d243dc40f85253e",
+      "sha256": "0c151412b57362f6e6dc795d882ba280f26d179cff01fb2f2726a13d24596d8b",
       "bytes": 33203
     },
     {
       "path": "package.json",
-      "sha256": "ac57787458141aee1ef61688cd78a681ea6650755dcfa6003a9a094e02862218",
+      "sha256": "62b2a53ec14d4831cf005a0c7892394020caa0aaaab384cb4e5ae579cb784e40",
       "bytes": 806
     },
     {
       "path": "README.md",
-      "sha256": "4bd228f6102038dd3c65ee067b5666bf8386bf2ff88ddd079f2a10a22bb46402",
+      "sha256": "7ddf87394702854e71664325e20e724402302c9f7b45a7443e1a46c5cc8345e6",
       "bytes": 5229
     },
     {
@@ -86,8 +86,8 @@
     },
     {
       "path": "scripts/build-site.mjs",
-      "sha256": "37e508d273ceec990cfd0c3796c72519922d957f31f607a9447560d1028e3aad",
-      "bytes": 7804
+      "sha256": "008b3de48579e6cd1de6d26ba065ee9489a2a94eb260639b6d547350a82f6798",
+      "bytes": 7987
     },
     {
       "path": "scripts/build.mjs",
@@ -101,7 +101,7 @@
     },
     {
       "path": "scripts/export-starter.mjs",
-      "sha256": "cd1354788bd69fc1dd354a8a830665dba5b834a4ba22d849df76c6a4fc30220f",
+      "sha256": "2e4a320d0da55b76b1137496d51beb461674e14c47e0701971a80aa537d466e9",
       "bytes": 13572
     },
     {
@@ -141,8 +141,8 @@
     },
     {
       "path": "tests/build-site.test.mjs",
-      "sha256": "d9928fa6b1f00fb049c6781e0fcccf9685b81396a562b40f1db830b78df2bcdf",
-      "bytes": 6032
+      "sha256": "883968185d47f12742529dfe8352edea2c0d577185dc326afc5a0cb1ea55ef26",
+      "bytes": 6669
     },
     {
       "path": "tests/export-starter.test.mjs",
