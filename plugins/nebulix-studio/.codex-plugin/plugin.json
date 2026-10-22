@@ -1,6 +1,6 @@
 {
   "name": "nebulix-studio",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "通过对话开发和维护 Nebulix 业务模块",
   "author": {
     "name": "WuyaoTech"
@@ -18,8 +18,7 @@
     ],
     "defaultPrompt": [
       "使用 Nebulix Studio 插件，调用 get_context 和 list_modules，检查 dev 环境中我可以维护的模块，本轮只检查。",
-      "使用 Nebulix Studio 的 studio-develop 技能维护 operations 模块，先检查源码仓库、草稿、已发布状态和权限。",
-      "使用 Nebulix Studio 的 studio-develop 技能，在已有模块仓库读取 docs/local-dev.md，检查是否支持本地前端与云端 dev 联调；支持时按仓库指引启动，由我正常登录，本轮不发布。",
+      "使用 Nebulix Studio 的 studio-develop 技能维护当前业务模块，先检查源码仓库、草稿、已发布状态和权限；读取本仓 docs/local-dev.md，按现有方式启动本地前端与云端 dev 联调，由我正常登录，本轮不发布。",
       "使用 Nebulix Studio 的 mobile-h5-develop 技能，在 HLSCS 客户仓开发移动 H5；使用插件自带 starter 和 SDK，保留现有修改，正常登录 dev，本轮先完成本地验证。"
     ]
   },
