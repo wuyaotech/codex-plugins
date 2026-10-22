@@ -18,7 +18,7 @@ description: Build or maintain a Nebulix mobile H5 in a customer module reposito
 
    输出目录必须不存在。脚本从插件自带 `assets/starter/` 复制完整源码、SDK 和锁文件，不下载主仓、不覆盖现有文件。模板是通用骨架，导出 receipt 标记本次面向 HLSCS；客户修改自己的标题、namespace 和模块配置。不要把示例身份、页面或数据当作已交付的 HLSCS 业务。
 3. 进入生成目录，先读其 `README.md` 和 `AGENTS.md`，按锁文件执行 `npm ci`、`npm run typecheck`、`npm run build`、`npm run dev`。Node 要求以生成工程为准。若资产或锁文件缺失，报告插件版本并修复分发包，不从维护者机器绝对路径取文件补齐。
-4. 默认打开终端给出的 H5 根网址，用户用自己的 dev 账号登录。`?preview=1` 只用于明确标记的本地示例。若端口占用，使用工程提供的端口配置，不关闭其他服务。
+4. 默认打开终端给出的 H5 根网址，用户用自己的 dev 账号登录。通用 starter 的 `?preview=1` 只用于明确标记的本地示例；现有 HLSCS 已移除示例模式，只能正常登录，不重新添加。若端口占用，使用工程提供的端口配置，不关闭其他服务。
 
 ## 修改页面和接入模块
 
@@ -31,6 +31,7 @@ description: Build or maintain a Nebulix mobile H5 in a customer module reposito
 ## 配置、发布与验收边界
 
 - H5 首页/导航/模块选择是代码，不走新的应用 DB 草稿、登记或组合发布 API。现有业务表、字典、菜单仍按 Studio 的 DB 真相源和发布计划处理；不能用本地 JSON 当作业务配置已发布。
-- 没有独立的 mobile 专用 MCP 工具。需要移动 ESM 发布时，先读 [mobile target 发布](references/studio-mobile-publish.md)，通过现有 `get_context` 探测服务能力后再使用现有上传/发布工具；插件版本不证明服务已上线。不得将不支持 mobile 的旧服务当作 desktop 兜底发布。完整 H5 托管则按生成工程的静态部署说明准备完整 `dist`，核对 API、资源路径和共享运行时；实际部署范围按本次授权执行。
+- 需要发布完整 H5 时，读 [整站发布与回退](references/h5-site-publish.md)：先探测服务 `features.h5Sites`，再构建 `h5-site`、上传、独立预检和激活。PM 不需要平台主仓或云端密钥；整站不调用旧 `prepare_release`，不夹带 DB 草稿。工具缺失时重新连接并核对实际 schema，不能按文档猜参数。
+- 需要移动 ESM 模块发布时，先读 [mobile target 发布](references/studio-mobile-publish.md)，通过现有 `get_context` 探测服务能力后再使用现有上传/发布工具；插件版本不证明服务已上线。不得将不支持 mobile 的旧服务当作 desktop 兜底发布。整站与单模块是不同 artifact；不能互换上传或用 desktop 兜底。
 - 分开报告：客户源码修改/提交、依赖安装和构建、浏览器交互、真实登录/API、部署及真机验证。接口替身测试、公共 API 可达和预览模式均不证明真人账号业务权限已验收。
 - 在主仓之外的干净目录完成一次安装、构建、启动与源码修改后回读，确认工程只依赖客户仓、插件交付物和公开 npm 依赖。交付保留锁文件、SDK 版本、运行命令及已验证限制；插件升级不会自动更新客户已复制的源码。

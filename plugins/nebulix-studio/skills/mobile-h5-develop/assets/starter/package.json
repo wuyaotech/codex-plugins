@@ -1,6 +1,6 @@
 {
   "name": "@nebulix/mobile-h5-starter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Standalone customer H5 with a vendored, versioned Nebulix client SDK",
@@ -12,7 +12,8 @@
     "build": "node scripts/build.mjs",
     "typecheck": "node scripts/typecheck.mjs",
     "test": "node scripts/test.mjs",
-    "build:module": "node scripts/build-module.mjs"
+    "build:module": "node scripts/build-module.mjs",
+    "build:site": "node scripts/build-site.mjs --module-key hlscs"
   },
   "dependencies": {
     "@nebulix/mobile-sdk": "file:vendor/mobile-sdk",

@@ -25,7 +25,7 @@ test('export is self-contained, pins React 18 and local SDK, and records verifia
   assert.equal(manifest.dependencies.react, '18.3.1');
   assert.equal(manifest.dependencies['@nebulix/mobile-sdk'], 'file:vendor/mobile-sdk');
   assert.ok(!JSON.stringify(manifest).includes('workspace:'));
-  for (const script of ['dev', 'build', 'typecheck', 'test', 'build:module']) assert.ok(manifest.scripts[script]);
+  for (const script of ['dev', 'build', 'typecheck', 'test', 'build:module', 'build:site']) assert.ok(manifest.scripts[script]);
   const config = JSON.parse(await fs.readFile(path.join(result.output, 'tsconfig.json'), 'utf8'));
   assert.deepEqual(config.compilerOptions.paths['@nebulix/mobile-sdk'], ['./vendor/mobile-sdk/src/index.ts']);
   assert.ok(config.include.includes('modules/**/*.tsx'));

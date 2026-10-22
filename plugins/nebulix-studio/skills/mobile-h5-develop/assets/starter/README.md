@@ -1,6 +1,6 @@
 # 独立移动 H5 开发套件
 
-套件 0.2.0，归属模块 `hlscs`。此目录可直接作为客户仓的 `h5-app/`，不需要 nebulix 主仓。SDK 客户端源码位于 `vendor/mobile-sdk/`，其版本及代码 SHA-256 记录在 `starter-receipt.json`。module-key 是交付归属，不自动替换示例业务页。
+套件 0.3.0，归属模块 `hlscs`。此目录可直接作为客户仓的 `h5-app/`，不需要 nebulix 主仓。SDK 客户端源码位于 `vendor/mobile-sdk/`，其版本及代码 SHA-256 记录在 `starter-receipt.json`。module-key 是交付归属，不自动替换示例业务页。
 
 ## 安装、启动与检查
 
@@ -40,4 +40,12 @@ node scripts/build-module.mjs --source ./examples/schedule/index.tsx --module-ke
 
 ## 版本与边界
 
-starter-receipt.json 记录导出基线与 SDK 源码 hash；客户可修改页面，SDK 升级应由平台提供新版本并核对变更。产物构建、云端模块发布、完整 H5 部署和原生分发是不同步骤。本套件不含三端原生壳、签名、云托管账号或在线构建服务；真实登录、业务 API 和手机设备需单独验收。
+starter-receipt.json 记录导出基线与 SDK 源码 hash；客户可修改页面，SDK 升级应由平台提供新版本并核对变更。## H5 整站发布（不需要平台主仓）
+
+客户修改完成后先提交本目录源码，然后执行 `npm run build:site`。命令从当前 Git HEAD 与 h5Config.version 生成 `dist/site/<moduleKey>-<version>-<commit12>.zip` 和 receipt，ZIP 根含 h5-site-manifest.json；拒绝 H5 目录未提交或未跟踪源码，无关 PC 目录修改不阻断。本地 build/dev 仍可随时使用。
+
+整站包从全新临时目录构建，只包含网页与公开环境配置，不包含 source maps、旧 artifacts、node_modules、凭据或源码。页面、共享运行时和站内模块使用 /_h5/<releaseKey>/ 路径，API 与 /__mobile/environment 保持同源稳定路径，发布切换后已打开页面继续读取它原来的版本资源。
+
+使用新版 Nebulix Studio 插件的 mobile-h5-develop 技能发布 development：先探测 get_context.features.h5Sites，再经平台完成 h5-site 上传、预览、执行、回读；整站发布不调用旧 prepare_release，不夹带表/菜单/字典草稿。平台预先绑定模块、环境与域名，不给 PM OSS/FC 密钥。若服务未提供能力或工具 schema 缺失，重新连接插件并报告，不能自行改用旧 web/mobile 模块发布。
+
+产物构建、云端模块发布、完整 H5 部署和原生分发是不同步骤。本套件不含三端原生壳、签名、云托管账号或在线构建服务；真实登录、业务 API 和手机设备需单独验收。

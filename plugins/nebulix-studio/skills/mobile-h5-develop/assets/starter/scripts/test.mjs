@@ -8,6 +8,7 @@ for (const [cwd, args] of [
   [root, ['--test', path.join(root, 'tests/server.test.mjs')]],
   [root, ['--test', path.join(root, 'tests/build-module.test.mjs')]],
   [root, ['--test', path.join(root, 'tests/h5-build.test.mjs')]],
+  [root, ['--test', path.join(root, 'tests/build-site.test.mjs')]],
   [root, ['--test', path.join(root, 'tests/export-starter.test.mjs')]],
 ]) {
   const result = spawnSync(process.execPath, args, {
