@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { inflateRawSync } from 'node:zlib';
 import { buildMobile, readH5Config } from '../scripts/build.mjs';
 import { createSiteZip, readSiteSource, siteManifest } from '../scripts/build-site.mjs';
 
@@ -74,7 +75,7 @@ test('site provenance rejects H5 changes and accepts unrelated payroll changes',
 test('site manifest and deterministic ZIP preserve file bytes and reject path escapes', () => {
   const manifest = siteManifest({ moduleKey: 'hlscs', version: '0.1.2', sourceCommit: 'a'.repeat(40) });
   assert.equal(manifest.releaseKey, '0.1.2-aaaaaaaaaaaa');
-  const files = [{ name: 'index.html', bytes: Buffer.from('<html>中文</html>') }, { name: 'h5-site-manifest.json', bytes: Buffer.from(JSON.stringify(manifest)) }];
+  const files = [{ name: 'index.html', bytes: Buffer.from('123456789') }, { name: 'h5-site-manifest.json', bytes: Buffer.from(JSON.stringify(manifest)) }];
   const zip = createSiteZip(files);
   assert.deepEqual(zip, createSiteZip(files));
   assert.equal(zip.readUInt32LE(0), 0x04034b50);
@@ -82,10 +83,17 @@ test('site manifest and deterministic ZIP preserve file bytes and reject path es
   for (const file of files) {
     const size = zip.readUInt32LE(offset + 18), nameSize = zip.readUInt16LE(offset + 26);
     assert.equal(zip.subarray(offset + 30, offset + 30 + nameSize).toString(), file.name);
-    assert.deepEqual(zip.subarray(offset + 30 + nameSize, offset + 30 + nameSize + size), file.bytes);
+    assert.equal(zip.readUInt16LE(offset + 8), 8, 'Standard ZIP DEFLATE method');
+    assert.equal(zip.readUInt32LE(offset + 22), file.bytes.length);
+    assert.deepEqual(inflateRawSync(zip.subarray(offset + 30 + nameSize, offset + 30 + nameSize + size)), file.bytes);
+    if (file.name === 'index.html') assert.equal(zip.readUInt32LE(offset + 14), 0xcbf43926, 'Known CRC32 vector uses uncompressed bytes');
     offset += 30 + nameSize + size;
   }
   assert.equal(zip.readUInt32LE(offset), 0x02014b50);
+  assert.equal(zip.readUInt16LE(offset + 10), 8);
+  assert.equal(zip.readUInt32LE(offset + 16), 0xcbf43926);
+  const repeated = Buffer.alloc(100000, 65);
+  assert.ok(createSiteZip([{ name: 'app.js', bytes: repeated }]).length < repeated.length / 10, 'Large runtime text is compressed for upload');
   assert.equal(zip.readUInt32LE(zip.length - 22), 0x06054b50);
   assert.throws(() => createSiteZip([{ name: '../.env', bytes: Buffer.from('secret') }]), /Unsafe ZIP/);
   assert.throws(() => siteManifest({ moduleKey: 'hlscs', version: '../bad', sourceCommit: 'a'.repeat(40) }), /safe release/);

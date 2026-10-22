@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { root, sdkRoot } from './tooling.mjs';
 
-export const STARTER_VERSION = '0.3.0';
+export const STARTER_VERSION = '0.3.1';
 export const starterPackage = {
   name: '@nebulix/mobile-h5-starter', version: STARTER_VERSION, private: true, type: 'module',
   description: 'Standalone customer H5 with a vendored, versioned Nebulix client SDK',
