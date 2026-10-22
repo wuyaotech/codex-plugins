@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "starter": {
     "name": "@nebulix/mobile-h5-starter",
-    "version": "0.2.0",
-    "sourceSha256": "b4c4e7deb98149c547c318a8142beb26b4daaf4ecbe280944934bcbdee339ec8"
+    "version": "0.3.0",
+    "sourceSha256": "67f5fa3780d81dd5febac1b62276934af49ba8ab574dbe635f49f8d8c2c9634d"
   },
   "moduleKey": "hlscs",
   "sdk": {
@@ -11,7 +11,7 @@
     "version": "0.1.0",
     "sourceSha256": "0dddc35e67a4ee7e3a3ecf0aea1720cbb32fec8c34b1c917f39cd4ec7791367b"
   },
-  "generatedAt": "2026-10-20T16:00:24.014Z",
+  "generatedAt": "2026-10-22T15:02:54.710Z",
   "dependencyInstallation": "npm",
   "files": [
     {
@@ -66,18 +66,18 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "099e8365700d4e95c33af029938e0f8db7f44f73ff1b7c62b25d396e3f37b3bf",
+      "sha256": "11541049d277af368316940126c3fe2a898eefbb82de6ac85d243dc40f85253e",
       "bytes": 33203
     },
     {
       "path": "package.json",
-      "sha256": "51cba056ba0f296e8f71b05acb5e178015133f51b9200e98d006ecbead380201",
-      "bytes": 738
+      "sha256": "ac57787458141aee1ef61688cd78a681ea6650755dcfa6003a9a094e02862218",
+      "bytes": 806
     },
     {
       "path": "README.md",
-      "sha256": "fdc67788ec37abea6cd3192f2e151a561317d2bb789595c2042a846a9c13267e",
-      "bytes": 4008
+      "sha256": "4bd228f6102038dd3c65ee067b5666bf8386bf2ff88ddd079f2a10a22bb46402",
+      "bytes": 5229
     },
     {
       "path": "scripts/build-module.mjs",
@@ -85,9 +85,14 @@
       "bytes": 11060
     },
     {
+      "path": "scripts/build-site.mjs",
+      "sha256": "37e508d273ceec990cfd0c3796c72519922d957f31f607a9447560d1028e3aad",
+      "bytes": 7804
+    },
+    {
       "path": "scripts/build.mjs",
-      "sha256": "da2821bf087ae80ad2e78a01d5cbacc8c6559c501f7c524425bcd7daf261b689",
-      "bytes": 8951
+      "sha256": "070007549ff2ba94736e73b54ed8af158316dd44b9ec4889fb625f4b9c6c9ad7",
+      "bytes": 10211
     },
     {
       "path": "scripts/dev.mjs",
@@ -96,13 +101,13 @@
     },
     {
       "path": "scripts/export-starter.mjs",
-      "sha256": "45cac579a42ccf33995d22655578a66d2ea570f8af465d0a5337e74fffafa5ec",
-      "bytes": 12158
+      "sha256": "cd1354788bd69fc1dd354a8a830665dba5b834a4ba22d849df76c6a4fc30220f",
+      "bytes": 13572
     },
     {
       "path": "scripts/test.mjs",
-      "sha256": "0b19727f67f3eacef85e58ad483e9d442c43bcf4cdd178429867b8954a6e5049",
-      "bytes": 776
+      "sha256": "813295d05af81c377057cf69693eb36fc284f840770acac954f199c032416d41",
+      "bytes": 844
     },
     {
       "path": "scripts/tooling.mjs",
@@ -135,9 +140,14 @@
       "bytes": 10381
     },
     {
+      "path": "tests/build-site.test.mjs",
+      "sha256": "d9928fa6b1f00fb049c6781e0fcccf9685b81396a562b40f1db830b78df2bcdf",
+      "bytes": 6032
+    },
+    {
       "path": "tests/export-starter.test.mjs",
-      "sha256": "c87f80c8296413e9e1ad68f4e89db13d0baca3803da1d706f2e6cc44ca9c8208",
-      "bytes": 3376
+      "sha256": "5fea655255dde09be5e9878ba342640bc4e0c3fded9312c3a8512452e6bb2cc9",
+      "bytes": 3390
     },
     {
       "path": "tests/h5-build.test.mjs",

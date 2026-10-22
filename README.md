@@ -144,3 +144,7 @@ node --test tests/mobile-h5-init.test.mjs
 格式参考：[OpenAI 插件与团队市场文档](https://developers.openai.com/plugins/build/plugins)。
 
 安装链路已用 Codex CLI 0.159.2 的独立配置目录验证，详见[分发验收记录](docs/verification-2026-10-01.md)。
+
+## 移动 H5 整站发布（0.1.6）
+
+0.1.6 随包提供 starter 0.3.0、SDK 0.1.0、build:site 和独立整站发布指引。PM 只用客户仓：检查并提交 H5 → 构建 ZIP → 插件上传 h5-site → 平台预检/激活/回读；回退复用历史站点 artifact。平台预先绑定域名和环境，PM 无需主仓、CI 或 OSS/FC 密钥。整站不发布 Studio 配置草稿，ESM mobile 模块仍走原独立路径。插件升级不会覆盖客户源码；服务能力需以 get_context.features.h5Sites 和实际工具 schema 为准。

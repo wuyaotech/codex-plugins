@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { root, sdkRoot } from './tooling.mjs';
 
-export const STARTER_VERSION = '0.2.0';
+export const STARTER_VERSION = '0.3.0';
 export const starterPackage = {
   name: '@nebulix/mobile-h5-starter', version: STARTER_VERSION, private: true, type: 'module',
   description: 'Standalone customer H5 with a vendored, versioned Nebulix client SDK',
@@ -13,6 +13,7 @@ export const starterPackage = {
     dev: 'node scripts/dev.mjs', build: 'node scripts/build.mjs',
     typecheck: 'node scripts/typecheck.mjs', test: 'node scripts/test.mjs',
     'build:module': 'node scripts/build-module.mjs',
+    'build:site': 'node scripts/build-site.mjs --module-key customer',
   },
   dependencies: { '@nebulix/mobile-sdk': 'file:vendor/mobile-sdk', react: '18.3.1', 'react-dom': '18.3.1' },
   devDependencies: { '@types/react': '18.3.12', '@types/react-dom': '18.3.1', esbuild: '0.24.2', typescript: '5.9.3' },
@@ -74,7 +75,15 @@ node scripts/build-module.mjs --source ./examples/schedule/index.tsx --module-ke
 
 ## 版本与边界
 
-starter-receipt.json 记录导出基线与 SDK 源码 hash；客户可修改页面，SDK 升级应由平台提供新版本并核对变更。产物构建、云端模块发布、完整 H5 部署和原生分发是不同步骤。本套件不含三端原生壳、签名、云托管账号或在线构建服务；真实登录、业务 API 和手机设备需单独验收。
+starter-receipt.json 记录导出基线与 SDK 源码 hash；客户可修改页面，SDK 升级应由平台提供新版本并核对变更。## H5 整站发布（不需要平台主仓）
+
+客户修改完成后先提交本目录源码，然后执行 \`npm run build:site\`。命令从当前 Git HEAD 与 h5Config.version 生成 \`dist/site/<moduleKey>-<version>-<commit12>.zip\` 和 receipt，ZIP 根含 h5-site-manifest.json；拒绝 H5 目录未提交或未跟踪源码，无关 PC 目录修改不阻断。本地 build/dev 仍可随时使用。
+
+整站包从全新临时目录构建，只包含网页与公开环境配置，不包含 source maps、旧 artifacts、node_modules、凭据或源码。页面、共享运行时和站内模块使用 /_h5/<releaseKey>/ 路径，API 与 /__mobile/environment 保持同源稳定路径，发布切换后已打开页面继续读取它原来的版本资源。
+
+使用新版 Nebulix Studio 插件的 mobile-h5-develop 技能发布 development：先探测 get_context.features.h5Sites，再经平台完成 h5-site 上传、预览、执行、回读；整站发布不调用旧 prepare_release，不夹带表/菜单/字典草稿。平台预先绑定模块、环境与域名，不给 PM OSS/FC 密钥。若服务未提供能力或工具 schema 缺失，重新连接插件并报告，不能自行改用旧 web/mobile 模块发布。
+
+产物构建、云端模块发布、完整 H5 部署和原生分发是不同步骤。本套件不含三端原生壳、签名、云托管账号或在线构建服务；真实登录、业务 API 和手机设备需单独验收。
 `;
 }
 export async function exportStarter({ output, moduleKey = 'customer', includeLock = true }) {
@@ -102,7 +111,7 @@ export async function exportStarter({ output, moduleKey = 'customer', includeLoc
   config.compilerOptions.paths['@nebulix/mobile-sdk'] = ['./vendor/mobile-sdk/src/index.ts'];
   config.include = [...new Set([...config.include, 'modules/**/*.ts', 'modules/**/*.tsx'])];
   files.set('tsconfig.json', Buffer.from(JSON.stringify(config, null, 2) + '\n'));
-  files.set('package.json', Buffer.from(JSON.stringify(starterPackage, null, 2) + '\n'));
+  files.set('package.json', Buffer.from(JSON.stringify({ ...starterPackage, scripts: { ...starterPackage.scripts, 'build:site': `node scripts/build-site.mjs --module-key ${moduleKey}` } }, null, 2) + '\n'));
   files.set('deployment.config.json', Buffer.from(JSON.stringify({ environment: 'development', apiBaseUrl: '/api', productHost: 'nebulix-web-dev.wuyaotech.com' }, null, 2) + '\n'));
   files.set('.gitignore', Buffer.from('node_modules/\ndist/\n.local/\n*.log\n'));
   files.set('.gitattributes', Buffer.from('# Preserve exported bytes so receipt hashes survive Git checkout.\n* -text\n'));
