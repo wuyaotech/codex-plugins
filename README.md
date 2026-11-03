@@ -1,6 +1,6 @@
 # WuyaoTech 团队插件
 
-wuyaotech 内部使用的 Codex 插件源。此仓库为私有仓库，通过 Git 分发；不是公开插件目录上架。
+WuyaoTech 维护的公开 Codex 插件源，通过 Git 分发。任何人都可以读取本仓库并安装插件，无需 GitHub 账号或仓库授权；使用 Nebulix 服务仍需自己的账号及相应模块权限。
 
 | 插件 | 标识 | 默认连接 |
 | --- | --- | --- |
@@ -8,7 +8,7 @@ wuyaotech 内部使用的 Codex 插件源。此仓库为私有仓库，通过 Gi
 
 ## 同事安装
 
-准备支持 `codex plugin` 命令的 Codex 客户端、Git，以及可以读取本仓库的 GitHub 账号。管理员需给使用者或所在 GitHub 团队本仓库的 Read 权限。能访问业务模块仓库不代表自动拥有本插件仓库权限。
+准备支持 `codex plugin` 命令的 Codex 客户端和 Git，并确保网络可以访问 GitHub。安装和更新本插件无需申请仓库 Read 权限；后续开发涉及的业务源码仓库仍按各自权限管理。
 
 在终端运行：
 
@@ -25,7 +25,21 @@ https://nebulix-web-dev.wuyaotech.com/api/mcp/studio
 
 若客户端支持添加市场但没有 `codex plugin add`，添加市场后重启桌面应用，在插件目录选择 **WuyaoTech 团队插件**，安装 **Nebulix Studio**。若完全没有 `codex plugin` 命令，请先更新客户端。
 
-私有仓库拉取失败时，先确认浏览器能访问本仓库，再完成 GitHub 的 Git 身份认证。使用 GitHub CLI 的同事可执行 `gh auth login`、`gh auth setup-git`；也可以使用已配置好的 Git 凭据管理器。不要把访问令牌贴进聊天、仓库 URL 或配置文件。
+拉取失败时，先确认浏览器能访问 [本仓库](https://github.com/wuyaotech/codex-plugins)，再检查 Git 是否安装、GitHub 网络连接和本机代理设置。公开插件源无需 GitHub 登录；私有业务源码仓库的访问授权应单独配置。
+
+### 让 Codex 帮忙安装
+
+可以把以下提示词直接发给 Codex：
+
+```text
+请按 https://github.com/wuyaotech/codex-plugins 的 README，帮我安装 Nebulix Studio 插件。
+先检查 Codex 客户端是否支持 plugin 命令，以及 Git 和 GitHub 网络连接。
+添加插件源：codex plugin marketplace add wuyaotech/codex-plugins --ref main
+安装插件：codex plugin add nebulix-studio@wuyaotech
+如果客户端没有 plugin add，添加市场后引导我在插件目录安装。
+完成后提示我重启 Codex、确认插件已启用并开启新对话。
+新对话中引导我用自己的 Nebulix 账号登录，检查当前账号及可访问模块。
+```
 
 ### 新对话提示词
 
@@ -78,9 +92,9 @@ https://nebulix-web-dev.wuyaotech.com/api/mcp/studio
 
 已安装用户仍按下方既有更新流程操作，核验实际插件版本并开启新会话。主仓 Skill 修改、团队源发布、PM 实际安装更新是三项独立状态。共享引擎账号 token 不是逐项目权限 token，通用 HTTP 不承诺任意资源隔离；平台仍检查本人的模块与项目资格。旧宿主能力缺失时先升级平台，更新插件不会自动开通引擎。
 
-### 三类独立权限
+### 安装与开发权限
 
-- **插件仓库**：GitHub Read 权限，用来安装和更新本插件。
+- **插件仓库**：公开可读，安装和更新无需 GitHub 账号或仓库授权。
 - **业务源码仓库**：各模块自己的 GitHub 读写权限，用来拉取、修改和推送业务代码。
 - **Nebulix 服务**：自己的账号、模块访问及 dev 发布权限，由服务端返回。安装插件不会增加服务端权限；若看不到模块或不能发布，请让 Nebulix 管理员核对账号和模块授权。
 
