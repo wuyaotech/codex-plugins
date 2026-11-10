@@ -9,6 +9,8 @@ description: Build or maintain a Nebulix mobile H5 in a customer module reposito
 
 ## 从客户仓开始
 
+团队插件的日常 H5 联调与站点自助发布使用 dev 连接 `nebulix-studio`。操作前以 `get_context` 的实际 environment 与 H5 能力为准。涉及生产时按 [Studio 跨环境流程](../studio-develop/SKILL.md#跨环境配置与上线候选)核对目标确实支持的产物种类；H5 的 dev 发布工具只在开发环境使用。
+
 1. 读取客户仓 `AGENTS.md`、`README.md`、`studio.module.json`、`package.json` 及已有移动端说明，核对分支、模块身份和未提交修改。已有 `h5-app/` 时直接维护，不用模板覆盖。纯本地开发不以 Studio MCP 登录为前置；需要发现未知仓库、读取/修改业务配置时再按 [studio-develop](../studio-develop/SKILL.md) 查询实际工具及权限。
 2. 没有 H5 时，以**此 SKILL.md 所在目录**解析脚本路径，执行：
 

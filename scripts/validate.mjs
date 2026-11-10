@@ -66,15 +66,17 @@ for (const entry of marketplace.plugins) {
   }
   const mcp = await readJson(await resolveInside(pluginRoot, manifest.mcpServers));
   assert.ok(Object.keys(mcp.mcpServers).length > 0);
+  if (entry.name === 'nebulix-studio') {
+    assert.deepEqual(Object.keys(mcp.mcpServers).sort(), ['nebulix-studio', 'nebulix-studio-prod']);
+    assert.equal(mcp.mcpServers['nebulix-studio'].url, 'https://nebulix-web-dev.wuyaotech.com/api/mcp/studio');
+    assert.equal(mcp.mcpServers['nebulix-studio-prod'].url, 'https://nebulix-web.wuyaotech.com/api/mcp/studio');
+  }
   for (const server of Object.values(mcp.mcpServers)) {
     assert.deepEqual(Object.keys(server).sort(), ['type', 'url'], 'Distribute endpoint only; do not embed credentials or headers');
     assert.equal(server.type, 'http');
     const url = new URL(server.url);
     assert.equal(url.protocol, 'https:');
     assert.ok(!url.username && !url.password && !url.search && !url.hash);
-    if (entry.name === 'nebulix-studio') {
-      assert.equal(url.href, 'https://nebulix-web-dev.wuyaotech.com/api/mcp/studio');
-    }
   }
   console.log(`OK ${entry.name}@${manifest.version}: manifest, skills, paths, credential-free HTTPS MCP`);
 }
