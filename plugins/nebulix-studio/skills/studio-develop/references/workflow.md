@@ -12,7 +12,7 @@
 
 ## dev 到 prod 的审核候选
 
-1. 在 dev 用 `export_promotion_source` 获取该模块已发布定义和本次选定的已上线产物元数据。保留签名快照的原始内容。记录源环境、模块、源码提交、选定配置路径与产物校验值。
+1. 在两端通过只读工具 `inspect_module_versions` 核对 environment、publishedRevision、fileCount、desktopVersion、mobileVersion，以及 backend 的版本和 checksum。在 dev 用 `export_promotion_source` 获取该模块已发布定义和本次选定的已上线产物元数据。保留返回的完整 `{manifest, signature, files}`，记录源环境、模块、源码提交、选定配置路径与产物校验值。
 2. 在 prod 用 `export_configs` 分别读取目标 draft 与 published revision。对照生产正式配置与现存草稿，向用户展示计划覆盖的具体路径。配置和产物均无差异时报告已一致，结束操作。涉及产物时，以本次源产物及目标端校验过的上传 ID 为据；保留版本和校验值，不能把 dev ID 当作 prod ID。
-3. 使用 prod 的 `prepare_promotion_candidate`，传入原始签名来源、目标 draft/published revision、选定路径及本次相关的已上传产物 ID。目标发生变更时重新读取、比较并处理冲突。基线、权限或签名校验失败时保留错误原因。
+3. 使用 prod 的 `prepare_promotion_candidate({moduleKey, environment, source, targetPublishedRevision, targetDraftRevision, paths, artifactIds})`。其中 `source` 原样使用上一步 dev 返回的完整签名来源，两个 revision 取自当前目标端，`paths` 是本次选定的配置路径，`artifactIds` 是本次关联的目标上传产物 ID。目标发生变更时重新读取、比较并处理冲突。基线、权限或签名校验失败时保留错误原因。
 4. 使用 prod 的 `get_promotion_candidate` 回读候选和服务端返回的审核地址（Studio 路由为 `/biz/platform/develop/promotion-review?moduleKey=…&candidateId=…`）。向维护者提供候选 ID、配置清单、产物版本与审核链接。生产审核及执行在该页面由授权人完成。重试或中断后先查询原候选。

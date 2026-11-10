@@ -47,7 +47,7 @@ description: Develop and maintain Nebulix modules through authenticated Studio t
 
 ## 跨环境配置与上线候选
 
-- **读取生产基线。** 在 prod 连接核对身份与模块，然后用 `export_configs(target=published)` 读取正式定义，记录 revision 和配置路径。只处理本次模块的配置及授权的产物，业务行、账号、令牌、环境密钥和项目授权留在原环境。
+- **读取生产基线。** 在 prod 连接核对身份与模块，然后用 `export_configs(target=published)` 读取正式定义，记录 revision 和配置路径。服务支持 `inspect_module_versions` 时，回读该模块当前运行的前后端版本。只处理本次模块的配置及授权的产物，业务行、账号、令牌、环境密钥和项目授权留在原环境。
 - **仅 prod 有模块时建立 dev 基线。** 先读 prod 正式配置，再核对 dev 的模块注册及本人授权；缺少时请负责 dev 的运营管理员开通。取得 dev 的 draft 和 published revision，比较三份配置，保留已有开发草稿。向 dev 提交经 `validate_configs`、`diff_configs` 验证的选定配置，`apply_drafts` 使用 dev 当前 revision。需要在 dev 生效时，按本次授权在 dev 执行 `prepare_release`、`execute_release`，回读状态与 dev 已发布定义。日常本地联调继续使用 dev。
 - **已验证的 dev 版本进入 prod 审核。** 确认源端 `get_context.features.promotion.signSource` 和目标端 `features.promotion.prepareCandidate` 可用，核对双方模块权限。按[配置与发布](references/workflow.md)导出签名来源并生成候选，交付服务端返回的审核地址和具体差异。由有权限的人在 Studio 核对候选并执行。用 `get_promotion_candidate` 回读实际状态，只有目标正式版本与发布结果核验通过才报告已上线。
 - 任一连接未启用、账号无权或服务缺少候选能力时，明确缺少的环境及能力，保留已取得的基线和 Git 提交；生产变更由既有 Studio 审核流程接手。不要在生产连接调用开发流程的草稿写入、直接发布或 H5 激活来绕过审核。
