@@ -9,3 +9,10 @@
 - 后端 ZIP 根目录 manifest.json 必须与模块、version、entry 匹配，默认入口 dist/index.mjs；示例仅导出 routes/crudHooks。
 - 前端 ZIP 保留 dist 内相对路径，entry 指向前端 ES module。上传与激活分离，候选 entryUrl 可供本地宿主预览。
 - 本地 `npm run build` 输出 artifact ZIP、校验值和描述；以平台 complete_upload 的核验结果为准。Git 凭据、平台账号、构建产物上传权限相互独立。
+
+## dev 到 prod 的审核候选
+
+1. 在 dev 用 `export_promotion_source` 获取该模块已发布定义和本次选定的已上线产物元数据。保留签名快照的原始内容。记录源环境、模块、源码提交、选定配置路径与产物校验值。
+2. 在 prod 用 `export_configs` 分别读取目标 draft 与 published revision。对照生产正式配置与现存草稿，向用户展示计划覆盖的具体路径。配置和产物均无差异时报告已一致，结束操作。涉及产物时，以本次源产物及目标端校验过的上传 ID 为据；保留版本和校验值，不能把 dev ID 当作 prod ID。
+3. 使用 prod 的 `prepare_promotion_candidate`，传入原始签名来源、目标 draft/published revision、选定路径及本次相关的已上传产物 ID。目标发生变更时重新读取、比较并处理冲突。基线、权限或签名校验失败时保留错误原因。
+4. 使用 prod 的 `get_promotion_candidate` 回读候选和服务端返回的审核地址（Studio 路由为 `/biz/platform/develop/promotion-review?moduleKey=…&candidateId=…`）。向维护者提供候选 ID、配置清单、产物版本与审核链接。生产审核及执行在该页面由授权人完成。重试或中断后先查询原候选。

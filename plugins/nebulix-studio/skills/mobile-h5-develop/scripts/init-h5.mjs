@@ -29,7 +29,11 @@ export async function initializeH5(output, { starterDir = bundledStarter } = {})
   }
   // Exclusive directory creation preserves existing customer files, including an empty directory.
   await mkdir(canonicalTarget);
-  await cp(source, canonicalTarget, { recursive: true, force: false, errorOnExist: true, dereference: false });
+  for (const name of await readdir(source)) {
+    await cp(path.join(source, name), path.join(canonicalTarget, name), {
+      recursive: true, force: false, errorOnExist: true, dereference: false,
+    });
+  }
   return canonicalTarget;
 }
 

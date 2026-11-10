@@ -3,6 +3,10 @@
     "nebulix-studio": {
       "type": "http",
       "url": "https://nebulix-web-dev.wuyaotech.com/api/mcp/studio"
+    },
+    "nebulix-studio-prod": {
+      "type": "http",
+      "url": "https://nebulix-web.wuyaotech.com/api/mcp/studio"
     }
   }
 }

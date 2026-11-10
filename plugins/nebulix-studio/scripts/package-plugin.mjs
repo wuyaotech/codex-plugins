@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -14,6 +14,9 @@ if (output === source || output.startsWith(source + path.sep)) throw new Error('
 try { await readFile(path.join(output, '.codex-plugin/plugin.json')); throw new Error('Output already contains a plugin; use a new directory'); }
 catch (error) { if (error.code !== 'ENOENT') throw error; }
 await mkdir(output, { recursive: true });
-await cp(source, output, { recursive: true, errorOnExist: true, force: false });
-await writeFile(path.join(output, '.mcp.json'), JSON.stringify({ mcpServers: { 'nebulix-studio': { type: 'http', url: `${url.href.replace(/\/$/, '')}/mcp/studio` } } }, null, 2) + '\n');
+for (const name of await readdir(source)) {
+  if (name === '.mcp.json') continue;
+  await cp(path.join(source, name), path.join(output, name), { recursive: true, errorOnExist: true, force: false });
+}
+await writeFile(path.join(output, '.mcp.json'), JSON.stringify({ mcpServers: { 'nebulix-studio': { type: 'http', url: `${url.href.replace(/\/$/, '')}/mcp/studio` } } }, null, 2) + '\n', { flag: 'wx' });
 console.log(output);
