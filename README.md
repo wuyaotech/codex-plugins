@@ -24,7 +24,7 @@ codex plugin add nebulix-studio@wuyaotech
 | `nebulix-studio` | `https://nebulix-web-dev.wuyaotech.com/api/mcp/studio` | 开发、联调、发布到 dev |
 | `nebulix-studio-prod` | `https://nebulix-web.wuyaotech.com/api/mcp/studio` | 读取生产配置，准备候选并交给 Studio 审核 |
 
-插件 0.2.0 保留原 dev 连接名称。分别用 `get_context` 和 `list_modules` 核对部署环境、能力和模块授权。生产已有的模块可以从已发布配置建立 dev 副本。审核候选需要两端服务已支持签名来源和候选准备，见[跨环境流程](plugins/nebulix-studio/skills/studio-develop/references/workflow.md)。
+插件 0.2.1 保留 dev/prod 两个连接名称与独立授权，增加大屏与 Chrome [统一开发流程](plugins/nebulix-studio/skills/studio-develop/references/unified-development.md)。新能力以服务端试点开关和本人权限为准；已有 OAuth 需重新授权所需 dashboard/browser scopes。分别用 `get_context` 和 `list_modules` 核对部署环境、能力和模块授权。生产已有的模块可以从已发布配置建立 dev 副本。审核候选需要两端服务已支持签名来源和候选准备，见[跨环境流程](plugins/nebulix-studio/skills/studio-develop/references/workflow.md)。
 
 若客户端支持添加市场但没有 `codex plugin add`，添加市场后重启桌面应用，在插件目录选择 **WuyaoTech 团队插件**，安装 **Nebulix Studio**。若完全没有 `codex plugin` 命令，请先更新客户端。
 

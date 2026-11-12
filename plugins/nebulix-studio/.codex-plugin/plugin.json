@@ -1,15 +1,15 @@
 {
   "name": "nebulix-studio",
-  "version": "0.2.0",
-  "description": "通过对话开发和维护 Nebulix 业务模块",
+  "version": "0.2.1",
+  "description": "通过对话开发和维护 Nebulix 业务模块与大屏",
   "author": {
     "name": "WuyaoTech"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Nebulix Studio",
-    "shortDescription": "开发 Nebulix 模块、核对环境配置并准备上线。",
-    "longDescription": "使用本人账号读取模块配置，维护 Git 源码，在开发环境验证表、页面、后端和移动 H5。SaaS 版另提供生产连接，供核对正式配置和提交待审批的候选。生产生效由维护者在 Studio 审核执行。各部署的能力与授权以连接状态为准。",
+    "shortDescription": "开发模块与大屏，通过 Chrome 联调并准备上线。",
+    "longDescription": "使用本人账号读取模块配置，维护 Git 源码，在开发环境验证表、页面、后端和移动 H5。支持大屏候选审核、精确版本发布和 Chrome 公共浏览器会话，统一开发能力以服务端试点开关为准。SaaS 版另提供生产连接，供核对正式配置和提交待审批的候选。生产生效由维护者在 Studio 审核执行。各部署的能力与授权以连接状态为准。",
     "developerName": "WuyaoTech",
     "category": "Productivity",
     "capabilities": [
