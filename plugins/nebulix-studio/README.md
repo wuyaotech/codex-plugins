@@ -1,6 +1,6 @@
 # Nebulix Studio
 
-在 Codex 中维护 Nebulix 模块的表、字典、菜单、前端页面和后端扩展，发布开发版本，并为生产上线准备审核候选。
+在 Codex 中维护 Nebulix 模块的表、字典、菜单、前端页面、后端扩展与大屏，通过 Chrome 联调，发布开发版本，并为生产上线准备审核候选。
 
 安装标识为 `nebulix-studio@wuyaotech`。SaaS 版使用 `nebulix-studio` 连接 dev，使用 `nebulix-studio-prod` 连接 prod。各环境独立使用个人账号完成浏览器 OAuth 登录，再用 `get_context` 核对部署环境和所需能力。[安装和权限说明](../../README.md)
 
@@ -10,6 +10,7 @@
 - `.mcp.json`：SaaS dev 和 prod 的 HTTP MCP 端点。
 - `skills/studio-develop/SKILL.md`：业务开发、源码维护、配置与发布流程。
 - `skills/studio-develop/references/workflow.md`：配置和产物契约。
+- `skills/studio-develop/references/unified-development.md`：公共开发任务、大屏候选审核、Studio 数据绑定和 Chrome 精确页面控制。0.2.1 新增，须由目标服务开放对应能力；插件更新不会启用生产试点或扩大权限。
 - `skills/studio-develop/references/blackhole.md`：黑洞场景、前后端通用 HTTP、连接凭据、能力检测、独立模块升级与真实宿主联调。
 - `skills/mobile-h5-develop/`：客户仓移动 H5 技能、模块/业务/API/发布参考、安全初始化脚本及随包独立 starter/SDK。
 
