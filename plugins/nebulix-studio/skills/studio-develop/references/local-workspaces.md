@@ -4,7 +4,7 @@
 
 ## 新对话先定位
 
-平台任务先用当前连接的 `get_context` / `list_modules` 核对权限，取得 `repositoryUrl`、`branch`、`directory`。用户已经指定的纯本地仓库任务可直接使用其仓库信息，不为本地查找强制恢复无关的 MCP 登录。
+平台配置任务用当前连接的 `get_context` / `list_modules` 核对权限；托管源码任务用 `source_get_context` / `source_get_repository` 核对独立源码权限，取得 `repositoryUrl`、`branch`、`directory`。托管仓库的正常 Git 鉴权见[托管模块源码](managed-source.md)，不要求个人 GitHub 账号。用户已经指定的纯本地仓库任务可直接使用其仓库信息，不为本地查找强制恢复无关的 MCP 登录。
 
 ```text
 node "<本技能目录>/scripts/local-workspaces.mjs" resolve --repository-url "<Git地址>" --context "<当前项目目录>" --directory "." --branch "draft" --owner "<本轮会话标识>"
