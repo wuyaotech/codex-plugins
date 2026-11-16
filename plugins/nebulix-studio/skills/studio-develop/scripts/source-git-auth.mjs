@@ -113,6 +113,11 @@ export function gitConfig(o, repository) {
   const args = [process.execPath, scriptPath, 'credential', '--service-url', o.service, '--module', o.module, '--environment', o.environment, '--auth-dir', o.authDir].map(value => shellQuote(value.replaceAll('\\', '/'))).join(' ');
   return [['credential.helper', ''], ['credential.helper', `!${args}`], ['credential.useHttpPath', 'true']];
 }
+export function gitCredential(result, now = Date.now()) {
+  // Provider tokens are opaque. Validate the Git line protocol, not a provider-specific token alphabet.
+  if (result?.username !== 'x-access-token' || typeof result.password !== 'string' || !/^[\x21-\x7e]{1,4096}$/.test(result.password) || typeof result.expiresAt !== 'string' || !Number.isFinite(Date.parse(result.expiresAt)) || Date.parse(result.expiresAt) <= now) fail('SOURCE_AUTH_INVALID_RESPONSE');
+  return `username=${result.username}\npassword=${result.password}\npassword_expiry_utc=${Math.floor(Date.parse(result.expiresAt) / 1000)}\n\n`;
+}
 const output = value => process.stdout.write(`${JSON.stringify(value, null, 2)}\n`);
 export async function main(argv = process.argv.slice(2)) {
   const o = options(argv);
@@ -141,8 +146,7 @@ export async function main(argv = process.argv.slice(2)) {
     let input = ''; for await (const chunk of process.stdin) { input += chunk; if (input.length > 16384) fail('SOURCE_AUTH_INVALID_GIT_REQUEST'); }
     const fields = gitRequest(input, session.repository);
     const result = await request(o, 'credential', fields, session.sessionToken);
-    if (result.username !== 'x-access-token' || typeof result.password !== 'string' || !/^[A-Za-z0-9_\-]{10,512}$/.test(result.password) || !Number.isFinite(Date.parse(result.expiresAt)) || Date.parse(result.expiresAt) <= Date.now()) fail('SOURCE_AUTH_INVALID_RESPONSE');
-    process.stdout.write(`username=${result.username}\npassword=${result.password}\npassword_expiry_utc=${Math.floor(Date.parse(result.expiresAt) / 1000)}\n\n`); return;
+    process.stdout.write(gitCredential(result)); return;
   }
   if (o.command === 'status') { output({ serviceUrl: o.service, user: session.user, repository: session.repository, expiresAt: session.expiresAt }); return; }
   if (o.command === 'logout') { await request(o, 'revoke', {}, session.sessionToken); await fs.unlink(o.file); output({ revoked: true }); return; }

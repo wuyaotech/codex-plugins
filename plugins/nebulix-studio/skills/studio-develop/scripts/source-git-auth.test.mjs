@@ -7,7 +7,7 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { options, saveSession, readSession, gitRequest, gitConfig } from './source-git-auth.mjs';
+import { options, saveSession, readSession, gitRequest, gitConfig, gitCredential } from './source-git-auth.mjs';
 
 const helper = fileURLToPath(new URL('./source-git-auth.mjs', import.meta.url));
 const repository = { moduleKey: 'testmodule', environment: 'development', owner: 'example', name: 'private-repo', repositoryUrl: 'https://github.com/example/private-repo.git', permission: 'write' };
@@ -31,7 +31,7 @@ async function fixture(t) {
     } else if (req.url.endsWith('/credential')) {
       if (controls.redirect) { res.writeHead(302, { location: `${url}/redirect-target` }); res.end(); return; }
       if (revoked || req.headers.authorization !== `Bearer ${platformToken}`) { res.writeHead(401); res.end(JSON.stringify({ code: 401, businessCode: 'SESSION_REVOKED' })); return; }
-      data = { username: 'x-access-token', password: githubToken, expiresAt: new Date(Date.now() + 3600000).toISOString() };
+      data = { username: 'x-access-token', password: controls.password ?? githubToken, expiresAt: new Date(Date.now() + 3600000).toISOString() };
     } else if (req.url.endsWith('/revoke')) { revoked = true; data = { revoked: true }; }
     res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ code: 200, data }));
   });
@@ -83,9 +83,24 @@ test('real Git credential fill uses scoped helper without personal/global GCM an
 
 test('first clone credential configuration works in an empty directory using ordinary Git', async t => {
   const f = await fixture(t); await saveSession(f.o, f.session());
+  // Synthetic opaque token with the length and punctuation class observed in the real provider response.
+  f.controls.password = `fixture.${'A'.repeat(380)}.B`;
+  assert.equal(f.controls.password.length, 390);
   const args = gitConfig(f.o, repository).flatMap(([key, value]) => ['-c', `${key}=${value}`]);
   const result = await run('git', [...args, 'credential', 'fill'], { cwd: f.dir, env: { GIT_CONFIG_GLOBAL: path.join(f.dir, 'missing-global'), GIT_CONFIG_NOSYSTEM: '1', GIT_TERMINAL_PROMPT: '0' }, input: `protocol=https\nhost=github.com\npath=example/private-repo.git\n\n` });
-  assert.equal(result.code, 0, result.stderr); assert.ok(result.stdout.includes(githubToken));
+  assert.equal(result.code, 0, result.stderr); assert.ok(result.stdout.includes(f.controls.password));
+  assert.equal(result.stderr, '');
+});
+
+test('opaque credentials preserve punctuation while rejecting protocol injection and invalid expiry', () => {
+  const now = Date.now(), expiresAt = new Date(now + 3600000).toISOString();
+  const payload = password => ({ username: 'x-access-token', password, expiresAt });
+  for (const password of ['short', 'fixture.part+/=~opaque', 'A'.repeat(4096)]) {
+    const lines = gitCredential(payload(password), now).split('\n');
+    assert.deepEqual(lines, ['username=x-access-token', `password=${password}`, `password_expiry_utc=${Math.floor(Date.parse(expiresAt) / 1000)}`, '', '']);
+  }
+  for (const password of ['', 'A'.repeat(4097), 'has space', 'tab\t', 'line\nusername=other', 'return\r', 'nul\0', '\x7f', '非ASCII', null, 123]) assert.throws(() => gitCredential(payload(password), now), { message: 'SOURCE_AUTH_INVALID_RESPONSE' });
+  for (const result of [null, {}, { ...payload('safe'), username: 'wrong' }, { ...payload('safe'), expiresAt: new Date(now).toISOString() }, { ...payload('safe'), expiresAt: 'invalid' }, { ...payload('safe'), expiresAt: 123 }]) assert.throws(() => gitCredential(result, now), { message: 'SOURCE_AUTH_INVALID_RESPONSE' });
 });
 
 test('wrong host, missing path, other repo and credential injection are rejected before HTTP', async t => {
