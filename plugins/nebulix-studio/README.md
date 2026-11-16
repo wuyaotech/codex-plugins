@@ -10,6 +10,7 @@
 - `.mcp.json`：SaaS dev 和 prod 的 HTTP MCP 端点。
 - `skills/studio-develop/SKILL.md`：业务开发、源码维护、配置与发布流程。
 - `skills/studio-develop/references/workflow.md`：配置和产物契约。
+- `skills/studio-develop/references/local-workspaces.md` 与 `scripts/local-workspaces.mjs`：新对话查找和复用真实本地仓库，持久登记常用目录与协作占用；脚本不执行 Git 写操作。
 - `skills/studio-develop/references/unified-development.md`：公共开发任务、大屏实时画布、完整工作包导入、Studio 数据绑定和 Chrome 精确页面控制；保存发布通过真实页面按钮完成。须由目标服务开放对应能力，插件更新不会启用生产能力或扩大权限。
 - `skills/studio-develop/scripts/dashboard-workspace.mjs`：0.3.0 候选新增完整大屏工作包的独立文件下载、解包、打包和上传工具；不依赖平台主仓。
 - `skills/studio-develop/references/blackhole.md`：黑洞场景、前后端通用 HTTP、连接凭据、能力检测、独立模块升级与真实宿主联调。
@@ -21,11 +22,13 @@
 
 Git 提交、DB 草稿、构建产物上传、线上激活、业务验收分别记录。需要发布时，明确模块、环境和本次变更范围；操作授权按技能与团队规则执行。
 
+源码 **0.3.2** 增加[本地仓库复用](skills/studio-develop/references/local-workspaces.md)：新对话核对当前项目和持久登记中的真实 Git 仓库，复用已有目录；多个候选、失效目录及协作占用明确返回，只有完整有限查找无匹配才考虑正常 clone。随包 `local-workspaces.mjs` 支持查询、核验、登记和协作占用，不执行 Git 写操作或删除源码。登记存放在本机 CODEX_HOME 下独立 plugin-data 目录，插件升级不清空。MCP 地址、OAuth 和平台发布流程保持现有契约；本版本不代表云空间已经具备完整源码运行能力。团队分发与本机安装另行核验。
+
 `0.3.1` 当前源码指引统一本地与云空间的实时画布工作流：先连接编辑器，通过 editor read/apply/import 读取和修改；完整包公开导出仅 `source=editor`。保存发布分别使用本地 `browser_execute(action=click)`／云空间 `browser_click`，参数为最新页面状态中的真实 ref，点击后还须回读状态和版本。后端大屏候选保存发布及无浏览器 artifact 保存路径退出公开工具；普通页面 API、独立数据、文档和参考能力保留。通用页面控制按 browser 授权与网页业务权限执行，不宣称逐按钮检查 dashboard:publish scope。dev/prod 两连接、模块联调和移动 H5 技能保持原样；分发、安装和平台部署分别验收，不因源码升级宣称已经上线。
 
 `0.3.0` 候选补齐完整大屏编辑器与文件工作区指引，保留现有 dev/prod 连接和模块本地联调。平台部署、真实本地/云空间验收及本机插件更新仍为 pending，详见 [0.3.0 候选记录](../../docs/dashboard-unified-0.3.0.md)。
 
-以上 `0.3.0` 段落是当时的候选记录；当前操作以 `0.3.1` 指引和连接实际能力为准。
+以上 `0.3.0` 段落是当时的候选记录；当前操作以插件清单版本、技能指引和连接实际能力为准。
 
 `0.1.4` 对应 starter 1.3.0 与前后端 `httpVersion=1`：按黑洞文档使用通用 request，或取得 token/engineProjectUuid 后原生 fetch。原场景与查询封装保留为便利 API；token 是共享引擎账号凭据，不是逐项目权限 token，通用请求不承诺任意接口逐资源隔离。写请求按业务授权执行，不复制口令或持久化 token。
 
