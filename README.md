@@ -30,7 +30,9 @@ codex plugin add nebulix-studio@wuyaotech
 
 `0.3.0` 上述说明保留为历史候选记录。`0.3.1` 将本地与云空间统一为[实时画布工作流](plugins/nebulix-studio/skills/studio-develop/references/unified-development.md)：完整工作包先导入已连接编辑器，再通过页面按钮保存发布；点击完成后回读真实状态与版本。公开导出仅 editor 来源，旧后端候选保存发布入口退出；独立数据、文档和参考能力保留。团队 dev/prod 连接及模块本地联调说明保持，源码准备、团队源发布、用户安装和平台部署分别核验。
 
-当前源码 `0.3.2` 在上述流程上增加[本地仓库复用](plugins/nebulix-studio/skills/studio-develop/references/local-workspaces.md)：新对话先核对当前项目和持久登记中的真实 Git 仓库，复用已有源码目录，避免每轮重新 clone；多个候选、失效目录和协作占用会明确返回。登记独立存放在本机 plugin-data 中，插件升级不清空。随包脚本只查询、核验和登记，不执行 Git 写操作或删除源码；MCP 连接和 OAuth 保持原样，云空间完整源码运行能力仍须另行实现和验收。
+当前源码 `0.3.3` 增加[托管模块源码](plugins/nebulix-studio/skills/studio-develop/references/managed-source.md)：开发者通过平台账号和模块源码授权使用普通本地 Git，不需要个人 GitHub 账号。MCP 返回仓库元数据，独立助手通过平台授权换取单仓库临时凭据；现有 dev/prod MCP、OAuth、本地工程复用及发布审核流程保持。团队分发、本机安装和平台部署分别核验。
+
+`0.3.2` 在上述流程上增加[本地仓库复用](plugins/nebulix-studio/skills/studio-develop/references/local-workspaces.md)：新对话先核对当前项目和持久登记中的真实 Git 仓库，复用已有源码目录，避免每轮重新 clone；多个候选、失效目录和协作占用会明确返回。登记独立存放在本机 plugin-data 中，插件升级不清空。随包脚本只查询、核验和登记，不执行 Git 写操作或删除源码；MCP 连接和 OAuth 保持原样，云空间完整源码运行能力仍须另行实现和验收。
 
 若客户端支持添加市场但没有 `codex plugin add`，添加市场后重启桌面应用，在插件目录选择 **WuyaoTech 团队插件**，安装 **Nebulix Studio**。若完全没有 `codex plugin` 命令，请先更新客户端。
 
