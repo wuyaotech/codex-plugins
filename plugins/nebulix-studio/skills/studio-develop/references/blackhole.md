@@ -1,6 +1,6 @@
 # Studio 黑洞接入
 
-适用：定制代码渲染场景，或按黑洞文档调用 HTTP（含业务授权的写接口）。先读模块 `docs/blackhole.md`、随包 `@nebulix/bp-sdk` 和 `web/src/runtime/blackhole.types.ts`。插件 0.1.4 / starter 1.3.0 增加通用 HTTP 指引；MCP `capabilityVersion=1` 不能证明线上运行宿主已升级。
+适用：定制代码渲染场景，或按黑洞文档调用 HTTP。先核对随包 `@nebulix/bp-sdk`、`web/src/runtime/blackhole.types.ts` 和工程中的适配器入口。starter 1.3.0 提供通用 HTTP 与场景示例，分别按目标宿主的能力版本接入。
 
 ## 检查能力
 
@@ -14,7 +14,20 @@
 
 `request` 固定使用平台配置的引擎源，自动加 token，HTTP 401 刷新一次；method 支持 GET/POST/PUT/PATCH/DELETE/HEAD/OPTIONS，默认 GET，GET/HEAD 不带 body。path 可带或不带 `/blackHole3D` 前缀，不能把外部 URL 作为 path。query 支持标量/数组，null 忽略；body 为 JSON，可传普通业务 headers，不能覆盖 Authorization 或传输/路由头。返回完整上游 JSON，不自动拆 data；`responseType:'text'` 返回原文，HEAD/204 为 null。
 
-两端 `getConnection` 返回 `{baseUrl,apiBaseUrl,token,expiresAt,projectUuid,engineProjectUuid}`。`expiresAt` 为 Unix 毫秒；`apiBaseUrl` 已含 `/blackHole3D`。可直接 `fetch(apiBaseUrl + '/project/engine/v3/getLevels', {method:'POST', headers:{Authorization:token,'Content-Type':'application/json'}, body:JSON.stringify({dataSetId})})`；Authorization 使用 token 原文，不加 Bearer。需要 projId 的接口按文档传 `engineProjectUuid`，request 不擅自注入。multipart/二进制用连接信息配合原生 fetch；浏览器直连需 CORS 和网络可达。完整双端示例见随包指南。
+两端 `getConnection` 返回 `{baseUrl,apiBaseUrl,token,expiresAt,projectUuid,engineProjectUuid}`。`expiresAt` 为 Unix 毫秒；`apiBaseUrl` 已含 `/blackHole3D`。可直接 `fetch(apiBaseUrl + '/project/engine/v3/getLevels', {method:'POST', headers:{Authorization:token,'Content-Type':'application/json'}, body:JSON.stringify({dataSetId})})`；Authorization 使用 token 原文，不加 Bearer。需要 projId 的接口按文档传 `engineProjectUuid`，request 不擅自注入。multipart/二进制用连接信息配合原生 fetch；浏览器直连需 CORS 和网络可达。
+
+starter 的前端场景示例为 `web/src/examples/BlackholeScenePage.tsx`，后端示例为 `server-extension/src/blackhole.ts`。前端也可从 `web/src/runtime/blackhole.ts` 导入 `getStudioBlackholeHttp`，在业务函数中直接调用：
+
+```ts
+const http = getStudioBlackholeHttp();
+const result = await http.request({
+  moduleKey, projectUuid,
+  method: 'POST', path: '/project/engine/v3/getLevels',
+  body: { dataSetId },
+});
+```
+
+moduleKey、projectUuid 和 dataSetId 取当前已授权业务上下文，result 按上游业务响应契约处理。
 
 HTTP 成功与业务成功分别核验。getLevels 已有 HTTP 200 但 `isSuccess:false/errMsg:'无效的pak文件'` 的联调结果，不能写成已取得楼层/房间业务结果。读取完整响应，按上游文档检查 isSuccess 等业务字段。
 
