@@ -22,6 +22,8 @@
 
 Git 提交、DB 草稿、构建产物上传、线上激活、业务验收分别记录。需要发布时，明确模块、环境和本次变更范围；操作授权按技能与团队规则执行。
 
+**0.3.5** 优先复用已有模块 Git 仓和现有认证。代码发布前用发布回执或 CI 构建记录核对运行版本。普通 MCP 发布使用 Studio 产物与发布授权。[运行版本核对流程](skills/studio-develop/references/workflow.md#核对目标环境的运行版本)
+
 **0.3.4** 将表与配置、API 与 Hook、PC 前端技术和宿主集成整理成按需查阅的开发指引，并合并本机仓库复用与托管 Git 授权的说明。[Studio 开发指引](skills/studio-develop/SKILL.md#修改配置和代码)
 
 **0.3.3** 增加[托管模块源码](skills/studio-develop/references/local-source.md)：平台账号按模块授权，通过独立凭据助手使用 GitHub App 的单仓库临时读写凭据，不要求开发者 GitHub 账号。MCP 只返回仓库元数据，授权网页使用正常平台登录；Windows 本机平台会话经 DPAPI 加密保存，GitHub token 不写盘。继续复用已登记工程，普通 Git、运行、构建及发布流程保持独立。源码权限与配置、发布权限分开；云空间完整源码执行器及团队分发另行验收。
