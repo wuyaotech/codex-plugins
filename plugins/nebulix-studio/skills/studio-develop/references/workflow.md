@@ -14,13 +14,19 @@
 
 ## 产物
 
-按工程脚本生成前后端 ZIP 与 SHA256。starter 的 `npm run build` 输出 `dist/web-<version>.zip`、`dist/backend-<version>.zip` 和 `dist/artifacts.json`，版本取自 `studio.module.json`。
+按本次发布范围使用工程脚本生成对应的 ZIP 与 SHA256。starter 的 `npm run build` 输出 `dist/web-<version>.zip`、`dist/backend-<version>.zip` 和 `dist/artifacts.json`，版本取自 `studio.module.json`。
 
 - 后端 ZIP 根目录有 manifest.json，其 moduleKey、version、entry 与代码匹配，starter 默认入口为 `dist/index.mjs`。
 - 前端 ZIP 保留完整资源及相对路径，entry 指向 ESM 入口。
 - 源码提交并推送后记录真实 Git SHA，随上传和发布清单关联；同版本对应确定的产物内容。
 
 调用 `prepare_upload`，按返回地址 PUT ZIP，再 `complete_upload` 核验内容。上传登记候选产物，候选 entryUrl 可用于前端预览。
+
+## 核对目标环境的运行版本
+
+1. 发布代码产物前，在目标环境用 `inspect_module_versions` 或 Studio 的已发布版本记录确认将被替换的产物，记下版本及可用的校验值。单发 PC Remote 时只核对 PC 产物。目标尚无该产物时按首次发布处理。
+2. 用同环境、同模块的发布回执或 CI 构建记录对照运行版本及可用的校验值，找到对应的 Git SHA。已有 Studio `releaseId` 或 MCP `artifactId` 时分别用 `get_release_status` 或 `inspect_artifact` 回查。Code API 的发布序号用于定位对应回执。
+3. 用已有 Git 访问和模块发布规则核对候选版本保留了线上改动。Code API 整包替换时核对已有路由及受影响的行为。仍缺证据时，说明缺哪个运行产物的回执或构建记录，暂停受影响的产物激活，并继续本地构建和验证。只要基线和发布授权已确认，即使托管源码查询被拒也可继续发布。
 
 ## 激活与回读
 

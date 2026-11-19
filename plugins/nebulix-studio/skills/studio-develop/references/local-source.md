@@ -4,9 +4,9 @@
 
 ## 1. 取得仓库信息
 
-平台托管模块调用 `source_get_context({environment})` 查看可用模块，再调用 `source_get_repository({moduleKey,environment,permission:"read"|"write"})` 取得 `repositoryUrl`、`branch`、`directory`。拉取用 read，推送用 write；源码、配置和发布权限分别管理。
+已有模块仓库时，核对 Git remote、模块目录和分支，沿用现有 Git 认证完成本轮需要的拉取或推送。已知托管仓库已有可用的 Git 认证时也直接复用。
 
-用户已指定的普通本地仓库任务直接使用其仓库信息和现有 Git 认证。以下平台授权步骤仅用于托管仓库。
+需要通过 Nebulix 托管 Git 获取访问时，调用 `source_get_context({environment})` 查看可用模块，再调用 `source_get_repository({moduleKey,environment,permission:"read"|"write"})` 取得 `repositoryUrl`、`branch`、`directory`。拉取用 read，推送用 write。托管 Git、配置和发布权限独立管理，发布按[配置与发布](workflow.md)执行。
 
 ## 2. 查找已有目录
 
