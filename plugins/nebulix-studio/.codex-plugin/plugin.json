@@ -1,6 +1,6 @@
 {
   "name": "nebulix-studio",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "通过对话开发和维护 Nebulix 业务模块与大屏",
   "author": {
     "name": "WuyaoTech"
@@ -18,7 +18,7 @@
     ],
     "defaultPrompt": [
       "使用 Nebulix Studio 插件，调用 get_context 和 list_modules，检查 dev 环境中我可以维护的模块，本轮只检查。",
-      "使用 Nebulix Studio 的 studio-develop 技能维护当前业务模块。复用已有 Git 仓库和现有 Git 认证，按本仓 docs/local-dev.md 启动本地前端与云端 dev 联调，由我正常登录，本轮不发布。",
+      "使用 Nebulix Studio 的 studio-develop 技能，在当前卢浦大桥仓库启动 dev 联调，打开专用 Chrome 窗口，我用自己的 dev 账号登录。",
       "使用 Nebulix Studio 的 mobile-h5-develop 技能，在 HLSCS 客户仓开发移动 H5；使用插件自带 starter 和 SDK，保留现有修改，正常登录 dev，本轮先完成本地验证。"
     ]
   },

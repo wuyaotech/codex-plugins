@@ -75,6 +75,10 @@ codex plugin add nebulix-studio@wuyaotech
 
 发布时明确授权模块、环境和范围，例如「将刚才确认的 operations 工单筛选改动发布到 dev，并验证线上结果」。
 
+### 卢浦大桥 dev 联调
+
+**0.3.6** 支持在卢浦大桥仓库的 Codex 对话中说「启动 dev 联调」，打开专用 Chrome 窗口。拉取模块仓库的 draft 分支后，用自己的 dev 账号登录，从真实项目菜单打开本地源码。页面刷新时会重新覆盖卢浦模块清单入口。[启动要求和命令](plugins/nebulix-studio/skills/studio-develop/references/lupu-direct-dev.md)
+
 ### 广州水投本地联调
 
 从插件 `0.1.2` 起，技能会优先识别模块仓库提供的联调方式。**插件和业务源码仓库要分别更新**：更新本插件不会拉取 `wuyaotech/studio-gz-water`，拉取业务代码也不会更新插件。已安装同事先按下方“更新与移除”更新插件并重启客户端，再将以下提示词发给新对话：
