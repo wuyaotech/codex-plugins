@@ -1,6 +1,6 @@
 ---
 name: studio-develop
-description: Develop Nebulix modules and dashboards through authenticated Studio tools, local code, Git, reviewed releases, and the Chrome development assistant. Use for tables, pages, APIs, dashboard Studio data bindings, bootstrapping dev from published prod definitions, and preparing reviewed promotion candidates.
+description: Develop Nebulix modules and dashboards through authenticated Studio tools, local code, Git, reviewed releases, and the Chrome development assistant. Use for tables, pages, APIs, dashboard Studio data bindings, starting Lupu Bridge dev integration from its local checkout, bootstrapping dev from published prod definitions, and preparing reviewed promotion candidates.
 ---
 
 # Nebulix 业务开发
@@ -25,9 +25,10 @@ description: Develop Nebulix modules and dashboards through authenticated Studio
 ## 本地前端与云端 dev 联调
 
 - 先读模块仓库的 `AGENTS.md`（如有）、`README.md`、`package.json` 和 `docs/local-dev.md`（如有），核对分支、未提交修改、Node 要求和脚本。保留本地工作，不假设所有模块支持同一套网关；缺少脚本时报告现状，不另搭静态 demo。
+- 当前仓库的 `studio.module.json` 声明 `lupu-bridge`，且用户说「启动 dev 联调」时，读[卢浦大桥 dev 联调](references/lupu-direct-dev.md)，直接用 `node <技能目录>/scripts/lupu-dev.mjs start --repo <仓库绝对路径>` 启动。用户在启动器打开的 Chrome 窗口正常登录 dev。启动失败时读回并报告具体原因。
 - 以仓库说明区分 `dev` 联调与 `preview` 静态预览。已支持的联调模式在本机加载模块源码，平台、登录、菜单和其他模块连接云端 dev。仅替换当前模块入口，不发布云端配置；启动与验证命令以该模块为准。
 - 已知关联仓库的纯本地联调不依赖 Studio MCP 认证。MCP 暂不可用时可继续本地源码工作，明确平台配置与发布状态尚未核验；需要读取或修改 Studio 配置、发布时仍须恢复本人 MCP 认证及相应权限。
-- 让用户在本地地址用自己的 dev 账号正常登录；不同 origin 不共享登录状态。不要复制线上 token、索要 DB/OSS 凭据或把凭据写入仓库。端口冲突先查进程归属，不关闭其他人的服务。
+- 让用户在联调流程打开的页面用自己的 dev 账号正常登录；不同 origin 不共享登录状态。不要复制线上 token、索要 DB/OSS 凭据或把凭据写入仓库。端口冲突先查进程归属，不关闭其他人的服务。
 - 验证本地入口、企业/项目上下文、平台菜单切换、源码保存后的更新与错误提示。业务数据仍按模块现有实现存储，联调不会把浏览器样例数据自动变成真实表；真实 API 的写操作会影响 dev。记录已验证范围，不把页面切换当成跨模块数据流转已打通。
 
 ## 修改配置和代码
