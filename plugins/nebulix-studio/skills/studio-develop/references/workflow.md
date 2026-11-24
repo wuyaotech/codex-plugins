@@ -14,13 +14,13 @@
 
 ## 产物
 
-按本次发布范围使用工程脚本生成对应的 ZIP 与 SHA256。starter 的 `npm run build` 输出 `dist/web-<version>.zip`、`dist/backend-<version>.zip` 和 `dist/artifacts.json`，版本取自 `studio.module.json`。
+本地测试和构建通过后展示业务效果。按用户授权提交并推送模块仓库，回读真实 Git SHA。按本次发布范围使用工程脚本生成对应的 ZIP 与 SHA256。starter 的 `npm run build` 输出 `dist/web-<version>.zip`、`dist/backend-<version>.zip` 和 `dist/artifacts.json`，版本取自 `studio.module.json`。
 
 - 后端 ZIP 根目录有 manifest.json，其 moduleKey、version、entry 与代码匹配，starter 默认入口为 `dist/index.mjs`。
 - 前端 ZIP 保留完整资源及相对路径，entry 指向 ESM 入口。
 - 源码提交并推送后记录真实 Git SHA，随上传和发布清单关联；同版本对应确定的产物内容。
 
-调用 `prepare_upload`，按返回地址 PUT ZIP，再 `complete_upload` 核验内容。上传登记候选产物，候选 entryUrl 可用于前端预览。
+使用目标环境授予的产物权限调用 `prepare_upload`，按返回地址 PUT ZIP，再 `complete_upload` 核验内容、版本和源码 SHA。上传登记候选产物，候选 entryUrl 可用于前端预览。
 
 ## 核对目标环境的运行版本
 
@@ -30,15 +30,23 @@
 
 ## 激活与回读
 
-`prepare_release` 关联配置 revision、源码 SHA 和产物 IDs。核对用户授权覆盖的模块、环境和清单，再 `execute_release`，持续查询 `get_release_status` 直至终态。
+`prepare_release` 关联配置 revision、源码 SHA 和产物 IDs。向用户说明模块、环境、变更与影响范围，核对本次授权覆盖该清单后 `execute_release`。持续查询 `get_release_status` 直至终态，`queued` 和 `running` 表示发布仍在进行。
 
-发布按配置/后端 → 前端执行，分步结果分别核验。失败或断线先查原 releaseId 的已完成步骤，按实际状态恢复。成功后回读正式配置、运行产物及真实项目业务结果。生产按团队审核和发布流程执行。
+发布按配置/后端 → 前端执行，各步骤分别生效。失败或断线先查原 releaseId 的已完成步骤，按服务端规则恢复。长时间 `running` 或 `requiresReview` 时交维护者核查原计划。成功后回读正式配置、运行产物，并在真实项目验证受影响操作、回读和权限隔离。生产按团队审核和发布流程执行。
+
+## 从 prod 正式配置建立 dev 基线
+
+1. 在 prod 核对账号、环境和模块权限，使用 `export_configs(target=published)` 读取正式定义和 revision。需要核对运行版本时使用 `inspect_module_versions`。处理范围限于本次模块获权的配置和产物，业务数据、账号、令牌、密钥与项目授权留在原环境。
+2. 在 dev 确认模块已注册且本人有权操作，缺项交 dev 运营管理员开通。读取 dev 的 draft 和 published，比较三份配置并保留已有草稿。对选定配置使用 `validate_configs` 和 `diff_configs`，再以 dev 当前 revision 调用 `apply_drafts`。
+3. 已取得本次 dev 发布授权时，按[激活与回读](#激活与回读)执行并核验正式定义。后续本地联调使用 dev。
 
 ## dev 到 prod 的审核候选
+
+先核对两端账号、模块权限及能力。dev 需要 `get_context.features.promotion.signSource`，prod 需要 `get_context.features.promotion.prepareCandidate`。缺项时说明环境和缺少的能力，保留已取得的基线和 Git 提交，交由生产维护者接手。生产只走候选审核，开发态草稿写入、直接发布及 H5 激活均使用 dev。
 
 prod 只读账号使用 `read` 和对应的 OAuth scope。准备上线候选需要目标端单独授予模块 `candidate` 权限、客户端 OAuth 授权包含 `studio:candidate`。目标端这项授权只用于有签名来源且受审核的候选；常规 `apply_drafts` 在开发环境按 `draft` 权限执行。
 
 1. 在两端通过只读工具 `inspect_module_versions` 核对 environment、publishedRevision、fileCount、desktopVersion、mobileVersion，以及 backend 的版本和 checksum。在 dev 用 `export_promotion_source` 获取该模块已发布定义和本次选定的已上线产物元数据。保留返回的完整 `{manifest, signature, files}`，记录源环境、模块、源码提交、选定配置路径与产物校验值。
 2. 在 prod 用 `export_configs` 分别读取目标 draft 与 published revision。对照生产正式配置与现存草稿，向用户展示计划覆盖的具体路径。配置和产物均无差异时报告已一致，结束操作。涉及产物时，以本次源产物及目标端校验过的上传 ID 为据；保留版本和校验值，不能把 dev ID 当作 prod ID。
 3. 使用 prod 的 `prepare_promotion_candidate({moduleKey, environment, source, targetPublishedRevision, targetDraftRevision, paths, artifactIds})`。其中 `source` 原样使用上一步 dev 返回的完整签名来源，两个 revision 取自当前目标端，`paths` 是本次选定的配置路径，`artifactIds` 是本次关联的目标上传产物 ID。目标发生变更时重新读取、比较并处理冲突。基线、权限或签名校验失败时保留错误原因。
-4. 使用 prod 的 `get_promotion_candidate` 回读候选和服务端返回的审核地址（Studio 路由为 `/biz/platform/develop/promotion-review?moduleKey=…&candidateId=…`）。向维护者提供候选 ID、配置清单、产物版本与审核链接。生产审核及执行在该页面由授权人完成。重试或中断后先查询原候选。
+4. 使用 prod 的 `get_promotion_candidate` 回读候选和服务端返回的审核地址（Studio 路由为 `/biz/platform/develop/promotion-review?moduleKey=…&candidateId=…`）。向维护者提供候选 ID、配置清单、产物版本与审核链接。生产审核及执行在该页面由授权人完成。重试或中断后先查询原候选。核验目标正式版本和发布结果后再报告上线。

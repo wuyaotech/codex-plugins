@@ -15,7 +15,7 @@
 
 1. 普通布局用 `dashboard_editor_apply`，带读取时的 expected 修订原子提交结构操作；只改变编辑器内存。结果未知时查询原浏览器 operation，不换 requestId 重放。用户同时编辑造成冲突时重读并合并。
 2. 文件开发用 `dashboard_workspace_export(source=editor, include=complete)`，绑定真实 target。先等浏览器 operation 完成，再按返回契约领取该 operationUuid 对应工作包；公开导出不接受 `source=stored`。检查 manifest、`readyForImport` 和 `unresolved`，不能把只读投影拼成整份 Schema。
-3. 随包 `scripts/dashboard-workspace.mjs` 下载、解包及打包。本地写用户工作目录，云空间文件工具写该空间 `dashboards/{uuid}/`。远端 MCP 不读取电脑 filePath；保留 `$protectedRef` 原路径和值。新增二进制可通过 manifest 和 `{ "$workspaceFile": "assets/文件名" }` 引用。
+3. 用随包的 [dashboard-workspace.mjs](../scripts/dashboard-workspace.mjs) 下载、解包及打包。本地写用户工作目录，云空间文件工具写该空间 `dashboards/{uuid}/`。远端 MCP 不读取电脑 filePath；保留 `$protectedRef` 原路径和值。新增二进制可通过 manifest 和 `{ "$workspaceFile": "assets/文件名" }` 引用。
 4. 修改后重新计算 size/sha256，通过 `dashboard_artifact_prepare`、辅助工具上传 bytes、`dashboard_artifact_complete` 得到完整产物。产物传输只准备导入材料，不保存大屏。临时上传票据不得写入 Git、Schema 或对话正文。
 5. `dashboard_workspace_import` 把产物导入指定编辑器，校验页面实例、编辑修订与持久基线，支持撤销。先核对真实画布、必要的截图和数据效果，再执行保存。新增代码编译不等于运行批准；沿用具体代码审核，不能以 import、devMode 或 debug 绕过。
 
@@ -24,10 +24,10 @@
 辅助脚本不启动本地 MCP 服务；下载目标须为新目录：
 
 ```text
-node <插件技能目录>/scripts/dashboard-workspace.mjs download --receipt <导出回执.json> --dir <新工作区目录>
-node <插件技能目录>/scripts/dashboard-workspace.mjs pack --dir <工作区目录> --out <新的候选包.json>
-node <插件技能目录>/scripts/dashboard-workspace.mjs upload --receipt <上传回执.json> --file <候选包.json>
-node <插件技能目录>/scripts/dashboard-workspace.mjs download-file --receipt <素材下载回执.json> --out <新素材文件>
+node <studio-develop技能目录>/scripts/dashboard-workspace.mjs download --receipt <导出回执.json> --dir <新工作区目录>
+node <studio-develop技能目录>/scripts/dashboard-workspace.mjs pack --dir <工作区目录> --out <新的候选包.json>
+node <studio-develop技能目录>/scripts/dashboard-workspace.mjs upload --receipt <上传回执.json> --file <候选包.json>
+node <studio-develop技能目录>/scripts/dashboard-workspace.mjs download-file --receipt <素材下载回执.json> --out <新素材文件>
 ```
 
 ## 页面保存与发布

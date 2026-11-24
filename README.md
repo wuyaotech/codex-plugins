@@ -56,7 +56,9 @@ codex plugin add nebulix-studio@wuyaotech
 
 ### 新对话提示词
 
-先验证接入及权限：
+按手头任务选择[技能入口](plugins/nebulix-studio/README.md#技能入口)。修改业务模块使用 `studio-develop`，操作实时大屏使用 `studio-dashboard-develop`。例如「用 `studio-dashboard-develop` 连接这张大屏，检查数据绑定并预览改动」。
+
+先用 `studio-develop` 验证模块接入及权限：
 
 ```text
 使用 Nebulix Studio 插件和 studio-develop 技能。
@@ -75,25 +77,16 @@ codex plugin add nebulix-studio@wuyaotech
 
 发布时明确授权模块、环境和范围，例如「将刚才确认的 operations 工单筛选改动发布到 dev，并验证线上结果」。
 
-### 卢浦大桥 dev 联调
+### 模块本地联调
 
-**0.3.6** 支持在卢浦大桥仓库的 Codex 对话中说「启动 dev 联调」，打开专用 Chrome 窗口。拉取模块仓库的 draft 分支后，用自己的 dev 账号登录，从真实项目菜单打开本地源码。页面刷新时会重新覆盖卢浦模块清单入口。[启动要求和命令](plugins/nebulix-studio/skills/studio-develop/references/lupu-direct-dev.md)
-
-### 广州水投本地联调
-
-从插件 `0.1.2` 起，技能会优先识别模块仓库提供的联调方式。**插件和业务源码仓库要分别更新**：更新本插件不会拉取 `wuyaotech/studio-gz-water`，拉取业务代码也不会更新插件。已安装同事先按下方“更新与移除”更新插件并重启客户端，再将以下提示词发给新对话：
+在模块仓库使用 [`studio-local-dev`](plugins/nebulix-studio/skills/studio-local-dev/SKILL.md)，从该仓库的 README 或联调文档确认实际支持的方式、启动命令和环境要求。
 
 ```text
-使用 Nebulix Studio 插件和 studio-develop 技能，维护 wuyaotech/studio-gz-water 的 gz-water 模块。
-保留我的未提交修改，获取最新 draft，先读取 AGENTS.md、README.md、package.json 和 docs/local-dev.md。
-使用本地前端 + 云端 dev 平台的联调方式。检查 Node >=22.13，按锁文件安装依赖，运行 npm run dev，打开本机工作台，我会自行登录 dev 账号。
-验证企业菜单、本地模块加载和保存源码后的自动刷新。本轮只做本地开发，不发布、不建表；缺少联调脚本时报告当前分支和提交，不要另搭 demo。
-若 Studio MCP 暂不可用，可以继续已知仓库的本地联调；配置和发布操作仍需恢复我的 MCP 登录与权限。
+使用 Nebulix Studio 插件的 studio-local-dev 技能，在当前模块仓库启动 dev 联调。
+保留我的未提交修改，按模块文档启动并告诉我浏览器入口，我会自行登录 dev 账号。
 ```
 
-`gz-water` 默认入口是 `http://127.0.0.1:5199/biz/gz-water/workbench`，每个人都在自己的电脑启动、登录和访问；此地址不会打开别人的开发服务。Node 版本、端口和 `npm run dev` 是该模块的要求，其他模块以自身文档为准。`npm run preview` 是静态预览，不会提供相同的平台联调体验。
-
-当前广州水投业务台账仍使用浏览器样例数据，本地与线上页面按 origin 分开存储；登录、成员、菜单和其他已接通的 API 使用真实 dev 数据，在本地入口执行这些 API 的写操作也会影响 dev。此流程不自动发布，也不要求数据库或 OSS 凭据。
+模块仓库决定启动、状态检查、停止和源码更新的方式。通过真实 dev API 提交的业务操作会写入 dev。
 
 ### 黑洞场景与前后端通用 HTTP
 
