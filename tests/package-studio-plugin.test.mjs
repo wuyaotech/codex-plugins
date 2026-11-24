@@ -20,7 +20,7 @@ async function newOutput(t) {
   return path.join(root, 'private');
 }
 
-test('private package keeps the existing server name and only its own OAuth endpoint', async t => {
+test('private package includes all Studio skills and only its own OAuth endpoint', async t => {
   const dest = await newOutput(t);
   await run(process.execPath, [script, '--service-url', 'https://studio.example/private/api/', '--output', dest]);
   const manifest = JSON.parse(await readFile(path.join(dest, '.codex-plugin/plugin.json'), 'utf8'));
@@ -28,7 +28,10 @@ test('private package keeps the existing server name and only its own OAuth endp
   assert.deepEqual(config, {
     mcpServers: { 'nebulix-studio': { type: 'http', url: 'https://studio.example/private/api/mcp/studio' } },
   });
-  assert.ok((await stat(path.join(dest, manifest.skills, 'studio-develop/SKILL.md'))).isFile());
+  const skills = ['studio-develop', 'studio-local-dev', 'studio-dashboard-develop', 'mobile-h5-develop'];
+  for (const skill of skills) {
+    assert.ok((await stat(path.join(dest, manifest.skills, skill, 'SKILL.md'))).isFile(), skill);
+  }
 });
 
 test('private package rejects URLs containing credentials before creating output', async t => {

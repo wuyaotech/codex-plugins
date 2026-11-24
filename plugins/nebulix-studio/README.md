@@ -4,21 +4,20 @@
 
 安装标识为 `nebulix-studio@wuyaotech`。SaaS 版使用 `nebulix-studio` 连接 dev，使用 `nebulix-studio-prod` 连接 prod。各环境独立使用个人账号完成浏览器 OAuth 登录，再用 `get_context` 核对部署环境和所需能力。[安装和权限说明](../../README.md)
 
-插件组成：
+## 技能入口
 
-- `.codex-plugin/plugin.json`：插件身份、版本和展示信息。
-- `.mcp.json`：SaaS dev 和 prod 的 HTTP MCP 端点。
-- `skills/studio-develop/SKILL.md`：业务开发、源码维护、配置与发布流程。
-- `skills/studio-develop/references/workflow.md`：草稿、产物、发布与跨环境审核。
-- `skills/studio-develop/references/local-source.md`：本地仓库复用、协作占用与托管 Git 授权。
-- `skills/studio-develop/references/unified-development.md`：公共开发任务、大屏实时画布、完整工作包导入、Studio 数据绑定和 Chrome 精确页面控制；保存发布通过真实页面按钮完成。须由目标服务开放对应能力，插件更新不会启用生产能力或扩大权限。
-- `skills/studio-develop/scripts/dashboard-workspace.mjs`：0.3.0 候选新增完整大屏工作包的独立文件下载、解包、打包和上传工具；不依赖平台主仓。
-- `skills/studio-develop/references/blackhole.md`：黑洞场景、前后端通用 HTTP、连接凭据、能力检测、独立模块升级与真实宿主联调。
-- `skills/mobile-h5-develop/`：客户仓移动 H5 技能、模块/业务/API/发布参考、安全初始化脚本及随包独立 starter/SDK。
+| 技能 | 适用任务 |
+| --- | --- |
+| [studio-develop](skills/studio-develop/SKILL.md) | 修改模块的表、字典、菜单、PC 页面或 API，管理模块草稿、产物与发布 |
+| [studio-local-dev](skills/studio-local-dev/SKILL.md) | 启动、检查和停止本地前端联调，验证 dev 已激活的后端变更 |
+| [studio-dashboard-develop](skills/studio-dashboard-develop/SKILL.md) | 连接大屏编辑器，修改实时画布、工作包和 Studio 数据绑定，通过编辑器保存或发布 |
+| [mobile-h5-develop](skills/mobile-h5-develop/SKILL.md) | 在客户仓开发独立移动 H5，使用随包 starter 和 SDK |
 
-在对应连接上调用 `get_context`、`list_modules`，选择模块并检查关联 Git 仓库、草稿和已发布版本。日常开发调试走 dev。只有生产有定义时，从 prod 导出已发布配置，在 dev 对照差异后初始化。开发版本验证通过后，可向支持该能力的 prod 服务提交审核候选，维护者在 Studio 审核执行。[跨环境配置与上线候选](skills/studio-develop/SKILL.md#跨环境配置与上线候选)
+**0.3.7** 将业务模块、本地联调和大屏开发拆成独立技能。移动 H5 继续作为独立入口，四个技能随同一个插件交付。`studio-develop` 保留旧提示词的联调和大屏转接。前端联调支持使用模块启动器或在授权的浏览器会话中覆盖模块清单。
 
-`0.1.2` 增加本地前端与云端 dev 联调指引：已有模块源码仓库时，先读其 `docs/local-dev.md` 与脚本，不要求先连通 Studio MCP 才能运行本地前端。是否支持联调、运行命令和数据来源以模块实现为准。插件与业务代码需要分别更新；广州水投的启动提示词见[团队仓库首页](../../README.md#广州水投本地联调)。
+涉及模块配置或发布时，在对应连接上调用 `get_context` 和 `list_modules`，选择模块并检查关联 Git 仓库、草稿和已发布版本。日常开发调试走 dev。只有生产有定义时，从 prod 导出已发布配置，在 dev 对照差异后初始化。开发版本验证通过后，可向支持该能力的 prod 服务提交审核候选，维护者在 Studio 审核执行。[跨环境配置与上线候选](skills/studio-develop/SKILL.md#跨环境配置与上线候选)
+
+`0.1.2` 增加本地前端与云端 dev 联调指引：已有模块源码仓库时，先读其 `docs/local-dev.md` 与脚本，不要求先连通 Studio MCP 才能运行本地前端。是否支持联调、运行命令和数据来源以模块实现为准。插件与业务代码需要分别更新；启动示例见[模块本地联调](../../README.md#模块本地联调)。
 
 Git 提交、DB 草稿、构建产物上传、线上激活、业务验收分别记录。需要发布时，明确模块、环境和本次变更范围；操作授权按技能与团队规则执行。
 
