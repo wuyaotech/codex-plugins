@@ -1,6 +1,6 @@
 # Nebulix Studio
 
-在 Codex 中维护 Nebulix 模块的表、字典、菜单、前端页面、后端扩展与大屏，通过 Chrome 联调，发布开发版本，并为生产上线准备审核候选。
+在 Codex 中维护 Nebulix 模块的表、字典、菜单、前端页面、后端扩展与大屏，连接 dev 宿主联调，发布开发版本，并为生产上线准备审核候选。
 
 安装标识为 `nebulix-studio@wuyaotech`。SaaS 版使用 `nebulix-studio` 连接 dev，使用 `nebulix-studio-prod` 连接 prod。各环境独立使用个人账号完成浏览器 OAuth 登录，再用 `get_context` 核对部署环境和所需能力。[安装和权限说明](../../README.md)
 
@@ -13,11 +13,11 @@
 | [studio-dashboard-develop](skills/studio-dashboard-develop/SKILL.md) | 连接大屏编辑器，修改实时画布、工作包和 Studio 数据绑定，通过编辑器保存或发布 |
 | [mobile-h5-develop](skills/mobile-h5-develop/SKILL.md) | 在客户仓开发独立移动 H5，使用随包 starter 和 SDK |
 
-**0.3.7** 将业务模块、本地联调和大屏开发拆成独立技能。移动 H5 继续作为独立入口，四个技能随同一个插件交付。`studio-develop` 保留旧提示词的联调和大屏转接。前端联调支持使用模块启动器或在授权的浏览器会话中覆盖模块清单。
+**0.3.8** 前端联调按模块仓说明使用宿主联调页，并沿用用户选择的浏览器。模块启动器提供本机入口，宿主检查模块读取权限。启动和验收见 [studio-local-dev](skills/studio-local-dev/SKILL.md#前端联调)。
+
+**0.3.7** 将业务模块、本地联调和大屏开发拆成独立技能。移动 H5 继续作为独立入口，四个技能随同一个插件交付。`studio-develop` 保留旧提示词的联调和大屏转接。
 
 涉及模块配置或发布时，在对应连接上调用 `get_context` 和 `list_modules`，选择模块并检查关联 Git 仓库、草稿和已发布版本。日常开发调试走 dev。只有生产有定义时，从 prod 导出已发布配置，在 dev 对照差异后初始化。开发版本验证通过后，可向支持该能力的 prod 服务提交审核候选，维护者在 Studio 审核执行。[跨环境配置与上线候选](skills/studio-develop/SKILL.md#跨环境配置与上线候选)
-
-`0.1.2` 增加本地前端与云端 dev 联调指引：已有模块源码仓库时，先读其 `docs/local-dev.md` 与脚本，不要求先连通 Studio MCP 才能运行本地前端。是否支持联调、运行命令和数据来源以模块实现为准。插件与业务代码需要分别更新；启动示例见[模块本地联调](../../README.md#模块本地联调)。
 
 Git 提交、DB 草稿、构建产物上传、线上激活、业务验收分别记录。需要发布时，明确模块、环境和本次变更范围；操作授权按技能与团队规则执行。
 

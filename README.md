@@ -82,8 +82,8 @@ codex plugin add nebulix-studio@wuyaotech
 在模块仓库使用 [`studio-local-dev`](plugins/nebulix-studio/skills/studio-local-dev/SKILL.md)，从该仓库的 README 或联调文档确认实际支持的方式、启动命令和环境要求。
 
 ```text
-使用 Nebulix Studio 插件的 studio-local-dev 技能，在当前模块仓库启动 dev 联调。
-保留我的未提交修改，按模块文档启动并告诉我浏览器入口，我会自行登录 dev 账号。
+启动当前模块的 dev 联调，用 Codex 内置浏览器。
+按模块仓文档优先使用宿主联调页。我会用已有模块读取权限的开发账号登录。
 ```
 
 模块仓库决定启动、状态检查、停止和源码更新的方式。通过真实 dev API 提交的业务操作会写入 dev。
