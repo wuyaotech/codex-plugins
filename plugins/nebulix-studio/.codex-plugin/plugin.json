@@ -1,6 +1,6 @@
 {
   "name": "nebulix-studio",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "通过对话开发和维护 Nebulix 业务模块与大屏",
   "author": {
     "name": "WuyaoTech"
@@ -8,8 +8,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Nebulix Studio",
-    "shortDescription": "开发模块与大屏，通过 Chrome 联调并准备上线。",
-    "longDescription": "使用本人账号读取模块配置，维护 Git 源码，在开发环境验证表、页面、后端和移动 H5。大屏在已连接的真实编辑器画布中读取、修改和导入完整工作包，通过页面按钮保存和发布，并回读实际状态。支持 Chrome 公共浏览器会话，能力以服务端实际开放为准。SaaS 版另提供生产连接，供核对模块正式配置和提交待审批的 Studio 模块候选，模块生产生效由维护者在 Studio 审核执行。各部署的能力与授权以连接状态为准。",
+    "shortDescription": "开发模块与大屏，连接 dev 宿主联调并准备上线。",
+    "longDescription": "使用本人账号读取模块配置，维护 Git 源码，在开发环境验证表、页面、后端和移动 H5。已开通的 dev 宿主支持在当前浏览器联调本机前端。大屏在已连接的真实编辑器画布中读取、修改和导入完整工作包，通过页面按钮保存和发布，并回读实际状态。大屏可使用服务端开放的 Chrome 公共浏览器会话。SaaS 版另提供生产连接，供核对模块正式配置和提交待审批的 Studio 模块候选，模块生产生效由维护者在 Studio 审核执行。各部署的能力与授权以连接状态为准。",
     "developerName": "WuyaoTech",
     "category": "Productivity",
     "capabilities": [
@@ -18,7 +18,7 @@
     ],
     "defaultPrompt": [
       "使用 Nebulix Studio 的 studio-develop 技能，检查 dev 环境中我可以维护的模块，本轮只检查。",
-      "使用 Nebulix Studio 的 studio-local-dev 技能，在当前模块仓库按已支持的方式启动 dev 联调，我用自己的 dev 账号登录。",
+      "启动当前模块的 dev 联调。使用 Nebulix Studio 的 studio-local-dev 技能，按模块仓说明优先使用宿主联调页，沿用当前浏览器。我用已有模块读取权限的开发账号登录。",
       "使用 Nebulix Studio 的 mobile-h5-develop 技能，在 HLSCS 客户仓开发移动 H5；使用插件自带 starter 和 SDK，保留现有修改，正常登录 dev，本轮先完成本地验证。"
     ]
   },
